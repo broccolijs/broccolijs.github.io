@@ -1,0 +1,31 @@
+{
+  "name": "broccoli-website",
+  "version": "1.0.0",
+  "description": "This repo contains the broccolijs.com website",
+  "dependencies": {},
+  "devDependencies": {
+    "broccoli": "2.0.0-beta.1",
+    "eslint": "^5.2.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "prettier": "^1.13.7"
+  },
+  "scripts": {
+    "lint": "eslint Brocfile.js",
+    "lint:fix": "eslint --fix Brocfile.js"
+  },
+  "keywords": [
+    "broccolijs",
+    "broccoli",
+    "build pipeline"
+  ],
+  "author": "Oli Griffiths <oligriffiths@users.noreply.github.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 8"
+  }
+}
