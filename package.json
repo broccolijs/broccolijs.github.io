@@ -25,7 +25,8 @@
   },
   "scripts": {
     "lint": "eslint Brocfile.js",
-    "lint:fix": "eslint --fix Brocfile.js"
+    "lint:fix": "eslint --fix Brocfile.js",
+    "serve": "broccoli serve"
   },
   "keywords": [
     "broccolijs",
