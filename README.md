@@ -5,6 +5,8 @@ website, including a build pipeline to generate a new static version of the site
 
 ## Usage
 
+Ensure broccoli is installed: `yarn global add broccoli-cli`
+
 ```
 yarn
 yarn serve
