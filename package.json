@@ -10,6 +10,8 @@
   "devDependencies": {
     "broccoli": "2.0.0-beta.1",
     "broccoli-markdown-resolver": "^0.0.1",
+    "broccoli-merge-trees": "^3.0.1",
+    "broccoli-sass-source-maps": "^4.0.0",
     "eslint": "^5.2.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.13.0",
@@ -17,7 +19,8 @@
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "prettier": "^1.13.7"
+    "prettier": "^1.13.7",
+    "sass": "^1.13.2"
   },
   "scripts": {
     "lint": "eslint Brocfile.js",
