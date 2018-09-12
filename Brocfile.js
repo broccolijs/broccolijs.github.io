@@ -5,11 +5,7 @@ const merge = require('broccoli-merge-trees');
 const sass = require('broccoli-sass-source-maps')(require('sass'));
 const funnel = require('broccoli-funnel');
 
-const markdown = new md('docs', {
-  layouts: {
-    default: 'src/templates/index.hbs',
-  },
-});
+const markdown = new md('src/docs', 'src/templates');
 
 const css = sass(['src'], 'styles/site.scss', 'assets/site.css', {
   annotation: 'Sass files',
