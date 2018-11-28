@@ -31,6 +31,7 @@
   "scripts": {
     "lint": "eslint Brocfile.js",
     "lint:fix": "eslint --fix Brocfile.js",
+    "build": "broccoli build --overwrite",
     "serve": "broccoli serve"
   },
   "keywords": [
