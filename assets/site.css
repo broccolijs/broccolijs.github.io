@@ -138,26 +138,24 @@ p, pre {
 
 .home > .header {
   border: 12px solid #0c350e;
-  background: linear-gradient(135deg, #1e481b, #4db779);
-  min-height: 100vh;
-  height: 100%;
+  background: linear-gradient(135deg, #1e481b, #48a268);
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.home > .header .logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 20px;
+  text-align: center;
 }
 .home > .header .logo img {
-  vertical-align: middle;
+  vertical-align: bottom;
+  display: inline-block;
 }
 .home > .header .logo h1 {
   color: white;
   font-size: 3rem;
   margin: 0 0 0 10px;
   font-family: monospace;
+  display: inline-block;
 }
 .home > .header .strapline {
   color: lightgrey;
@@ -167,7 +165,8 @@ p, pre {
 .home > .header .terminal {
   border-radius: 5px;
   overflow: hidden;
-  margin-top: 70px;
+  margin: 70px 0 50px;
+  text-align: left;
 }
 .home > .header .terminal .terminal-header {
   display: flex;
@@ -188,10 +187,21 @@ p, pre {
   color: lightgrey;
 }
 .home > .header .requirements {
-  text-align: center;
   margin-top: 20px;
+  text-align: center;
   color: darkgrey;
   font-size: 0.8rem;
+}
+.home > .header .hero-buttons {
+  margin-top: 50px;
+}
+.home > .header .hero-buttons .hero-button {
+  display: inline-block;
+  border: 3px solid white;
+  padding: 15px;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
 }
 .home .center {
   display: flex;
