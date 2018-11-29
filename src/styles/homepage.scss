@@ -2,20 +2,19 @@
 .home {
   > .header {
     border: 12px solid #0c350e;
-    background: linear-gradient(135deg, #1e481b, #4db779);
-    min-height: 100vh;
-    height: 100%;
+    background: linear-gradient(135deg, #1e481b, #48a268);
+    min-height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px;
+    text-align: center;
 
     .logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
 
       img {
-        vertical-align: middle;
+        vertical-align: bottom;
+        display: inline-block;
       }
 
       h1 {
@@ -23,6 +22,7 @@
         font-size: 3rem;
         margin: 0 0 0 10px;
         font-family: monospace;
+        display: inline-block;
       }
     }
 
@@ -35,7 +35,8 @@
     .terminal {
       border-radius: 5px;
       overflow: hidden;
-      margin-top: 70px;
+      margin: 70px 0 50px;
+      text-align: left;
 
       .terminal-header {
         display: flex;
@@ -60,10 +61,23 @@
     }
 
     .requirements {
-      text-align: center;
       margin-top: 20px;
+      text-align: center;
       color: darkgrey;
       font-size: 0.8rem;
+    }
+
+    .hero-buttons {
+      margin-top: 50px;
+
+      .hero-button {
+        display: inline-block;
+        border: 3px solid white;
+        padding: 15px;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+      }
     }
   }
 
