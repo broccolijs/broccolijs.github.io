@@ -1,21 +1,96 @@
 <html>
 
 <head>
-    <title>Welcome to Broccoli.js | Broccolijs.com</title>
+    <title>Welcome to Broccoli.js | broccoli.build</title>
     <link media="all" rel="stylesheet" href="/assets/site.css" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#628336">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#ffffff">
 </head>
 
-<body>
+
+<body class="home">
+    <section class="header">
+        <div class="center">
+            <div class="logo">
+                <img src="/assets/images/logo-white-small.png"
+                     srcset="/assets/images/logo-white-small.png 1x, /assets/images/logo-white-small@2x.png 2x"
+                     width="100px"
+                />
+
+                <h1>
+                    Broccoli.js
+                </h1>
+            </div>
+            <h2 class="strapline">
+                The asset pipeline for ambitious web applications
+            </h2>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-button"></div>
+                    <div class="terminal-button"></div>
+                    <div class="terminal-button"></div>
+                </div>
+
+                <code class="terminal-body hljs language-bash">yarn add --dev broccoli broccoli-cli</code>
+            </div>
+            <div class="requirements">
+                Requires Node v6+
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <h1 class="heading">Welcome to Broccoli.js</h1>
+        <h3>So what is Broccoli?</h3>
+<p>Broccoli is a Javascript build tool that exposes a simple Javascript API to perform file-based transformations,
+allowing developers to easily build complex build pipelines, using a simple, functional API.</p>
+<h3>Why choose Broccoli?</h3>
+<div class="summary">
     <div>
-        <img src="/assets/images/logo-large.png" width="250px" />
+        <h4>Blazing fast ⚡️</h4>
+        <p>Broccoli's incremental rebuild system gives you sub-second compile times even when you're working with hundreds of files.</p>
     </div>
+    <div>
+        <h4>Less (code) is more 📉</h4>
+        <p>Broccoli's ecosystem of high-quality plugins means you only have to write a few lines of code for most common tasks.</p>
+    </div>
+    <div>
+        <h4>Flexible 🤸‍</h4>
+        <p>Use Broccoli by itself, or as part of a larger system like Grunt, Rails, ember-cli, or even make. Broccoli don't care, it just builds what it's told.</p>
+    </div>
+    <div>
+        <h4>It's Just Javascript 🙌</h4>
+        <p>A Brocfile.js is just an ES6 module – use the Javascript you already know to specify how to build your assets.</p>
+    </div>
+</div>
+<p>Broccoli simply orchestrates file transformations via plugins. Plugins perform the actual work and operate on files,
+Broccoli coordinates the inputs and output of plugins.</p>
+<p>Broccoli provides a simple, functional javascript API for constructing your build pipeline.</p>
+<h3>Example pipeline</h3>
+<pre><code class="hljs language-js"><span class="hljs-comment">/* Brocfile.js */</span>
 
-    <section><p>Welcome to Broccoli.js</p>
-<p><a href="/file.html">this links to another page</a></p>
-<p><a href="/folder">this links to a subfolder</a></p>
-</section>
+<span class="hljs-keyword">const</span> compileSass = <span class="hljs-built_in">require</span>(<span class="hljs-string">'broccoli-sass-source-maps'</span>)(<span class="hljs-built_in">require</span>(<span class="hljs-string">'sass'</span>));
+<span class="hljs-keyword">const</span> babel = <span class="hljs-built_in">require</span>(<span class="hljs-string">'broccoli-babel-transpiler'</span>);
+<span class="hljs-keyword">const</span> merge = <span class="hljs-built_in">require</span>(<span class="hljs-string">'broccoli-merge-trees'</span>);
 
-    <div>Markdown file: src/docs/index.md</div>
+<span class="hljs-keyword">const</span> appRoot = <span class="hljs-string">'app'</span>;
+
+<span class="hljs-keyword">const</span> css = compileSass([appRoot], <span class="hljs-string">'styles/app.scss'</span>, <span class="hljs-string">'assets/app.css'</span>);
+<span class="hljs-keyword">const</span> js = babel(appRoot);
+
+<span class="hljs-built_in">module</span>.exports = merge([styles, scripts]);
+</code></pre>
+<p>The above is an example of a simple Broccoli build pipeline that compiles Sass files and transcodes javascript using
+Babel, then merges the result into an output directory.</p>
+
+    </section>
 </body>
 
 </html>
