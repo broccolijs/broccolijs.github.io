@@ -1,3 +1,5 @@
-body {
-  background: palegreen;
-}
+@import './reset';
+@import './base';
+@import './homepage';
+@import './body';
+@import "../../node_modules/highlight.js/styles/vs2015";

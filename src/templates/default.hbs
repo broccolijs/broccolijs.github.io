@@ -1,18 +1,12 @@
 <html>
 
-<head>
-    <title>{{attributes.title}} | Broccolijs.com</title>
-    <link media="all" rel="stylesheet" href="/assets/site.css" />
-</head>
+{{partial '_head'}}
 
 <body>
-    <div>
-        <img src="/assets/images/logo-large.png" width="250px" />
-    </div>
-
-    <section>{{body}}</section>
-
-    <div>Markdown file: {{markdownFile}}</div>
+    <section class="content">
+        <h1 class="heading">{{attributes.title}}</h1>
+        {{body}}
+    </section>
 </body>
 
 </html>

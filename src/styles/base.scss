@@ -1,0 +1,55 @@
+*, :after, :before {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+  line-height: 1.15;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  color: #6F7C82;
+  font-family: tablet-gothic,"Helvetica Neue",Arial,sans-serif;
+  font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #1e481b;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+h4 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+h5 {
+  font-size: 1.2rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p, pre {
+  margin-bottom: 1rem;
+}

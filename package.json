@@ -7,14 +7,16 @@
     "front-matter": "^2.3.0",
     "handlebars": "^4.0.11",
     "markdown-it": "^8.4.2",
+    "markdown-it-highlightjs": "^3.0.0",
     "mkdirp": "^0.5.1",
     "promise-map-series": "^0.2.3",
     "walk-sync": "^0.3.3"
   },
   "devDependencies": {
-    "broccoli": "2.0.0-beta.1",
+    "broccoli": "^2.0.1",
     "broccoli-cli": "^1.0.0",
     "broccoli-funnel": "^2.0.1",
+    "broccoli-livereload": "^1.3.0",
     "broccoli-markdown-resolver": "^0.0.1",
     "broccoli-merge-trees": "^3.0.1",
     "broccoli-sass-source-maps": "^4.0.0",
@@ -25,6 +27,7 @@
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
+    "minireset.css": "^0.0.3",
     "prettier": "^1.13.7",
     "sass": "^1.13.2"
   },
