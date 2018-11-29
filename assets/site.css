@@ -165,7 +165,7 @@ p, pre {
 .home > .header .terminal {
   border-radius: 5px;
   overflow: hidden;
-  margin: 70px 0 50px;
+  margin: 70px 0 20px;
   text-align: left;
 }
 .home > .header .terminal .terminal-header {
@@ -187,7 +187,7 @@ p, pre {
   color: lightgrey;
 }
 .home > .header .requirements {
-  margin-top: 20px;
+  margin-bottom: 20px;
   text-align: center;
   color: darkgrey;
   font-size: 0.8rem;
