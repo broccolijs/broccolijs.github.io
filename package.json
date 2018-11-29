@@ -35,7 +35,8 @@
     "lint": "eslint Brocfile.js",
     "lint:fix": "eslint --fix Brocfile.js",
     "build": "broccoli build --overwrite",
-    "serve": "broccoli serve"
+    "serve": "broccoli serve",
+    "deploy": "yarn build && git checkout master && git rm -r . && cp -R dist/* ./ && git commit -am 'Deploy' && git push && git checkout -"
   },
   "keywords": [
     "broccolijs",
