@@ -1,81 +1,81 @@
 
 .home {
   > .header {
-    border: 12px solid #0c350e;
-    background: linear-gradient(135deg, #1e481b, #48a268);
-    min-height: 100%;
-    display: flex;
     align-items: center;
+    background: linear-gradient(135deg, $header-bg-left, $header-bg-right);
+    border: 12px solid $header-border-color;
+    display: flex;
     justify-content: center;
+    min-height: 100%;
     padding: 20px;
     text-align: center;
 
     .logo {
 
       img {
-        vertical-align: bottom;
         display: inline-block;
+        vertical-align: bottom;
       }
 
       h1 {
-        color: white;
+        color: $color-white;
+        display: inline-block;
+        font-family: monospace;
         font-size: 3rem;
         margin: 0 0 0 10px;
-        font-family: monospace;
-        display: inline-block;
       }
     }
 
     .strapline {
-      color: lightgrey;
-      margin-top: 30px;
+      color: $color-light-grey;
       font-size: 1.5rem;
+      margin-top: 30px;
     }
 
     .terminal {
       border-radius: 5px;
-      overflow: hidden;
       margin: 70px 0 20px;
+      overflow: hidden;
       text-align: left;
 
       .terminal-header {
-        display: flex;
         align-items: center;
+        background: $terminal-header-color;
+        display: flex;
         height: 30px;
-        background: #525252;
         padding-left: 8px;
 
         .terminal-button {
+          background: $color-dark-grey;
           border-radius: 50%;
-          background: darkgrey;
-          width: 10px;
           height: 10px;
           margin-left: 6px;
+          width: 10px;
         }
       }
 
       .terminal-body {
+        color: $terminal-body-color;
         padding: 20px;
-        color: lightgrey;
       }
     }
 
     .requirements {
+      color: $color-dark-grey;
+      font-size: .8rem;
       margin-bottom: 20px;
       text-align: center;
-      color: darkgrey;
-      font-size: 0.8rem;
     }
 
     .hero-buttons {
       margin-top: 50px;
 
       .hero-button {
-        display: inline-block;
-        border: 3px solid white;
-        padding: 15px;
-        color: white;
+        border: 3px solid $color-white;
         border-radius: 5px;
+        color: $color-white;
+        display: inline-block;
+        padding: 15px;
         text-decoration: none;
       }
     }
@@ -88,10 +88,10 @@
 
   > .content {
     > .summary {
-      margin: 30px 0 10px;
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      margin: 30px 0 10px;
 
       div {
         width: 50%;

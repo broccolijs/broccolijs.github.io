@@ -3,19 +3,31 @@
 const md = require('./lib/plugin/markdown-handlebars');
 const merge = require('broccoli-merge-trees');
 const sass = require('broccoli-sass-source-maps')(require('sass'));
+const sassLint = require('broccoli-sass-lint');
 const funnel = require('broccoli-funnel');
 const assetRev = require('broccoli-asset-rev');
 const LiveReload = require('broccoli-livereload');
+const CleanCss = require('broccoli-clean-css');
 const env = require('broccoli-env').getEnv() || 'development';
 const isProduction = env === 'production';
 
-const markdown = new md('src/docs', 'src/templates');
+const appRoot = 'src';
 
-const css = sass(['src'], 'styles/site.scss', 'assets/site.css', {
+const markdown = new md(`${appRoot}/docs`, `${appRoot}/templates`);
+
+let css = sassLint(appRoot + '/styles', {
+  disableTestGenerator: true,
+});
+
+css = sass([css, 'node_modules'], `site.scss`, 'assets/site.css', {
   annotation: 'Sass files',
   sourceMap: true,
   sourceMapContents: true,
 });
+
+if (isProduction) {
+  css = new CleanCss(css);
+}
 
 const pub = funnel('src/public', {
   annotation: 'Public assets',

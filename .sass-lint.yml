@@ -1,0 +1,8 @@
+rules:
+  extends-before-mixins: 2 # throws error
+  extends-before-declarations: 2 # throws error
+  no-vendor-prefixes: 0
+  no-color-keywords: 0
+  nesting-depth:
+    - 1
+    - max-depth: 4
