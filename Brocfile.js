@@ -13,7 +13,12 @@ const isProduction = env === 'production';
 
 const appRoot = 'src';
 
-const markdown = new md(`${appRoot}/docs`, `${appRoot}/templates`);
+const markdown = new md(`${appRoot}/docs`, `${appRoot}/templates`, {
+  data: {
+    title: 'broccoli.build',
+    url: 'https://broccoli.build',
+  },
+});
 
 let css = sassLint(appRoot + '/styles', {
   disableTestGenerator: true,

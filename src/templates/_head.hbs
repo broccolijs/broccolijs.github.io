@@ -1,5 +1,5 @@
 <head>
-    <title>{{attributes.title}} | broccoli.build</title>
+    <title>{{attributes.title}} | {{site.title}}</title>
     <link media="all" rel="stylesheet" href="/assets/site.css" />
 
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -10,4 +10,9 @@
     <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#628336">
     <meta name="msapplication-TileColor" content="#00aba9">
     <meta name="theme-color" content="#ffffff">
+
+    <meta property="og:title" content="{{attributes.title}} | {{site.title}}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{site.url}}/{{outputFile}}" />
+    <meta property="og:image" content="{{site.url}}/assets/logo/logo-large.png" />
 </head>
