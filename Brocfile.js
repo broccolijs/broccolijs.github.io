@@ -16,6 +16,7 @@ const appRoot = 'src';
 const markdown = new md(`${appRoot}/docs`, `${appRoot}/templates`, {
   data: {
     title: 'broccoli.build',
+    description: 'Broccoli.js - The asset pipeline for ambitious web applications',
     url: 'https://broccoli.build',
   },
 });
