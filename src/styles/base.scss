@@ -70,3 +70,11 @@ a {
 a:hover {
   text-decoration: none;
 }
+
+code {
+  border: 1px solid $color-light-grey;
+  background: $color-off-white;
+  color: $color-red;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
