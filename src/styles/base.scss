@@ -61,3 +61,12 @@ p,
 pre {
   margin-bottom: 1rem;
 }
+
+a {
+  color: $link-color;
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
+}
