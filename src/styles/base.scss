@@ -72,9 +72,9 @@ a:hover {
 }
 
 code {
-  border: 1px solid $color-light-grey;
   background: $color-off-white;
+  border: 1px solid $color-light-grey;
+  border-radius: 3px;
   color: $color-red;
   padding: 2px 5px;
-  border-radius: 3px;
 }
