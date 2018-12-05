@@ -3,6 +3,7 @@ rules:
   extends-before-declarations: 2 # throws error
   no-vendor-prefixes: 0
   no-color-keywords: 0
+  force-pseudo-nesting: 0
   nesting-depth:
     - 1
     - max-depth: 4

@@ -1,7 +1,12 @@
 body {
-  > .content {
+  > .content,
+  > footer {
     margin: 0 auto;
     max-width: 960px;
     padding: 20px;
+  }
+
+  > footer {
+    text-align: center;
   }
 }
