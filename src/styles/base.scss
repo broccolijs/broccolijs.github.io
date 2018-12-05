@@ -71,10 +71,12 @@ a:hover {
   text-decoration: none;
 }
 
-code {
-  background: $color-off-white;
-  border: 1px solid $color-light-grey;
-  border-radius: 3px;
-  color: $color-red;
-  padding: 2px 5px;
+p {
+  code {
+    background: $color-off-white;
+    border: 1px solid $color-light-grey;
+    border-radius: 3px;
+    color: $color-red;
+    padding: 2px 5px;
+  }
 }
