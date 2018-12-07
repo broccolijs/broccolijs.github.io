@@ -24,6 +24,6 @@ deploy:
   keep-history: true
   local-dir: dist
   project-name: https://broccoli.build
-  target-branch: travis-deploy
+  target-branch: master
   on:
-    branch: travis
+    branch: code
