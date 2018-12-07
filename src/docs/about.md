@@ -5,6 +5,7 @@ title: What is Broccoli?
 Broccoli is a simple Javascript build tool, that allows you to configure your build pipeline in javascript (like you're
 already used to writing), and handles setting up the filesystem state for each transformation that's going to happen.
 
+${toc}
 
 ## What is a build tool?
 

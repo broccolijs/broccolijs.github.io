@@ -19,6 +19,7 @@
     "markdown-it": "^8.4.2",
     "markdown-it-anchor": "^5.0.2",
     "markdown-it-highlightjs": "^3.0.0",
+    "markdown-it-toc-done-right": "^2.0.3",
     "mkdirp": "^0.5.1",
     "promise-map-series": "^0.2.3",
     "sass": "^1.13.2",
