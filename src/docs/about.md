@@ -13,9 +13,9 @@ A build tool's job is to take input files (your javascript, css, html, etc) and 
 form of distributable version. Typically this will involve things like javascript transformations to allow you to write
 newer syntax that will work in a browser, to use things like Sass for your CSS, etc.
 
-Broccoli.js is different to other build tools. You may be used to tools like [Grunt](https://gruntjs.com/) (a task runner),
-[Gulp](https://gulpjs.com/) (streams) or [Webpack](https://webpack.js.org/) (a module bundler), these all operate on
-different levels to Broccoli.
+Broccoli.js is different to other build tools. You may be used to tools like [Grunt](https://gruntjs.com/) (a task
+runner), [Gulp](https://gulpjs.com/) (streams) or [Webpack](https://webpack.js.org/) (a module bundler), these all
+operate on different levels to Broccoli.
 
 Broccoli works at the file-system level, it provides a Javascript API to wrap other node tools like
 [Babel](https://babeljs.io/), [Rollup](https://rollupjs.org/) or [Node-Sass](https://github.com/sass/node-sass), that
@@ -23,9 +23,9 @@ operate on a set of input files, and emit output files.
 
 ## Thinking in Broccoli
 
-Broccoli at its heart is very simple, it handles managing the file-system state, and simply takes input files and passes
-them as inputs to plugins, and takes the output from each plugin and passes it as an input to the next one. The order in
-which these operations happen is determined by the build file, that you're going to learn how to create.
+Broccoli at its heart is very simple, it handles managing the file-system state, and simply takes input files and
+passes them as inputs to plugins, and takes the output from each plugin and passes it as an input to the next one. The
+order in which these operations happen is determined by the build file, that you're going to learn how to create.
 
 You can think of Broccoli much like a simple programming language, where the output of a function can be passed as the
 input to another function.
@@ -51,8 +51,8 @@ Additionally, a `src/styles` directory and the input file `site.scss` is passed 
 (like `-ms` or `-webkit`) to attributes, which is then in turn passed into `merge()`, which will merge the contents of
 the output directories from `uglify` and `autoprefixer` into one directory, our final output.
 
-This should all be fairly familiar to you if you've ever written Javascript (or any programming language for that matter)
-before, it's just inputs and output.
+This should all be fairly familiar to you if you've ever written Javascript (or any programming language for that
+matter) before, it's just inputs and output.
 
 ## Thinking in Broccoli
 
