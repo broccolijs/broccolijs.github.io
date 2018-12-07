@@ -57,9 +57,15 @@ h6 {
   font-size: 1rem;
 }
 
+ul,
 p,
 pre {
   margin-bottom: 1rem;
+}
+
+ul {
+  list-style: disc;
+  margin-left: 1rem;
 }
 
 a {

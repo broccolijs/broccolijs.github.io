@@ -26,7 +26,7 @@ let css = sassLint(appRoot + '/styles', {
   disableTestGenerator: true,
 });
 
-css = sass([css, 'node_modules'], `site.scss`, 'assets/site.css', {
+css = sass([css, 'node_modules'], 'site.scss', 'assets/site.css', {
   annotation: 'Sass files',
   sourceMap: true,
   sourceMapContents: true,
