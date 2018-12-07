@@ -14,6 +14,7 @@ install:
   - yarn install --no-lockfile --non-interactive
 
 script:
+  - yarn lint
   - yarn build
 
 deploy:
@@ -23,6 +24,6 @@ deploy:
   keep-history: true
   local-dir: dist
   project-name: https://broccoli.build
-  target-branch: master
+  target-branch: travis-deploy
   on:
-    branch: code
+    branch: travis
