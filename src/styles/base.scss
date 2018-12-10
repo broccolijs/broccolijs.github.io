@@ -81,7 +81,9 @@ p {
   }
 }
 
-iframe[src^="https://codesandbox.io"] {
-  background: $color-terminal;
-  width: 100%;
+iframe {
+  &[src^='https://codesandbox.io'] {
+    background: $color-terminal;
+    width: 100%;
+  }
 }
