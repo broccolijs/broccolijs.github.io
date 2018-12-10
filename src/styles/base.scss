@@ -80,3 +80,8 @@ p {
     padding: 2px 5px;
   }
 }
+
+iframe[src^="https://codesandbox.io"] {
+  background: $color-terminal;
+  width: 100%;
+}
