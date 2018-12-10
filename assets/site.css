@@ -161,6 +161,29 @@ p code {
   padding: 2px 5px;
 }
 
+iframe[src^="https://codesandbox.io"] {
+  background: #1c2022;
+  width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .mobile-show {
+    display: block;
+  }
+
+  .mobile-hide {
+    display: none;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .mobile-show {
+    display: none;
+  }
+
+  .mobile-hide {
+    display: block;
+  }
+}
 body > nav {
   background: #0c350e;
   border-bottom: 1px solid #1e481b;
