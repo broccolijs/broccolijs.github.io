@@ -62,6 +62,11 @@ pre {
   margin-bottom: 1rem;
 }
 
+a {
+  color: $link-color;
+  text-decoration: underline;
+}
+
 a,
 a:visited {
   color: $link-color;
@@ -70,4 +75,22 @@ a:visited {
 
 a:hover {
   text-decoration: none;
+}
+
+
+p {
+  code {
+    background: $color-off-white;
+    border: 1px solid $color-light-grey;
+    border-radius: 3px;
+    color: $color-red;
+    padding: 2px 5px;
+  }
+}
+
+iframe {
+  &[src^='https://codesandbox.io'] {
+    background: $color-terminal;
+    width: 100%;
+  }
 }

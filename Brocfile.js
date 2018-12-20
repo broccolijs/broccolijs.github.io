@@ -13,7 +13,14 @@ const isProduction = env === 'production';
 
 const appRoot = 'src';
 
-const markdown = new md(`${appRoot}/docs`, `${appRoot}/templates`);
+const markdown = new md(`${appRoot}/docs`, `${appRoot}/templates`, {
+  data: {
+    title: 'broccoli.build',
+    description: 'Broccoli.js - The asset pipeline for ambitious web applications',
+    url: 'https://broccoli.build',
+    menu: require('./menu'),
+  },
+});
 
 let css = sassLint(appRoot + '/styles', {
   disableTestGenerator: true,
@@ -41,7 +48,7 @@ if (isProduction) {
   });
 } else {
   tree = new LiveReload(tree, {
-    target: 'index.html',
+    target: '\\.html$',
   });
 }
 

@@ -1,14 +1,22 @@
+
+$color-white: white;
+$color-off-white: #f3f3f3;
+$color-light-grey: lightgrey;
+$color-dark-grey: darkgrey;
+$color-light-black: #333;
+$color-terminal: #1c2022;
+$color-dark-green: #1e481b;
+$color-light-green: #48a268;
+$color-red: #d03333;
+
 $body-color: #6f7c82;
 $link-color: #1e481b;
 
-$heading-color: #1e481b;
-$header-bg-left: #1e481b;
-$header-bg-right: #48a268;
+$heading-color: $color-dark-green;
+$header-bg-left: $color-dark-green;
+$header-bg-right: $color-light-green;
 $header-border-color: #0c350e;
 
 $terminal-header-color: #525252;
 $terminal-body-color: #d3d3d3;
 
-$color-white: white;
-$color-light-grey: lightgrey;
-$color-dark-grey: darkgrey;
