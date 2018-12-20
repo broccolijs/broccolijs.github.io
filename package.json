@@ -43,6 +43,7 @@
     "lint": "eslint Brocfile.js",
     "lint:fix": "eslint --fix Brocfile.js && sass-lint-auto-fix",
     "build": "broccoli build --overwrite",
+    "build-prod": "BROCCOLI_ENV=production broccoli build --overwrite",
     "serve": "broccoli serve",
     "deploy": "BROCCOLI_ENV=production yarn build && git checkout master && git rm -r . && cp -R dist/ ./ && git add . && git commit -m 'Deploy' && git push && git checkout -"
   },

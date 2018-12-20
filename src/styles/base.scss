@@ -78,9 +78,16 @@ a {
   text-decoration: underline;
 }
 
+a,
+a:visited {
+  color: $link-color;
+  text-decoration: underline;
+}
+
 a:hover {
   text-decoration: none;
 }
+
 
 p {
   code {
@@ -89,5 +96,12 @@ p {
     border-radius: 3px;
     color: $color-red;
     padding: 2px 5px;
+  }
+}
+
+iframe {
+  &[src^='https://codesandbox.io'] {
+    background: $color-terminal;
+    width: 100%;
   }
 }

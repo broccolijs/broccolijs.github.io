@@ -9,4 +9,8 @@ module.exports = [
     title: 'About',
     url: '/about.html',
   },
+  {
+    title: 'Getting Started',
+    url: '/getting-started.html',
+  },
 ];
