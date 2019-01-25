@@ -17,6 +17,10 @@ body {
         color: $color-white;
         display: inline-block;
         padding: 10px;
+
+        &:visited {
+          color: $color-white;
+        }
       }
     }
   }

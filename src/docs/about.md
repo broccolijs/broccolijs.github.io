@@ -68,13 +68,45 @@ matter) before, it's just inputs and output.
 
 There are 3 main concepts to get your head around when using Broccoli:
 
-* [Nodes](#nodes)
 * [Plugins](#plugins)
+* [Nodes](#nodes)
 * [Trees](#trees)
+
+### Plugins
+
+Plugins are what a build pipeline developer will interact with most. Plugins are what do the actual work of transforming
+input files into output files. The API of a plugin is pretty simple, all that's required is creating a class that 
+extends the [broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class provided by Broccoli, and
+implementing a `build()` method, that performs some work or returns a promise.
+
+```js
+const Plugin = require('broccoli-plugin');
+
+class MyPlugin extends Plugin
+{
+  build() {
+    // A plugin can receive single or multiple inputs nodes/directories
+    // The files are available in this.inputPaths[0]/this.inputPaths[1]...
+    // You can do anything with these files that you can do in node
+    // The output of your plugin must write to this.outputPath
+  }
+}
+```
+
+Basic plugins are super simple, anything you can do in node, you can do in the `build()` method. A plugin can receive
+one or multiple inputs, and these are available in the `this.inputPaths` array in the order they are provided.
+`this.inputPaths` contains paths to directories, that are the `outputPath` of previous plugins. Each `inputPath` 
+contains files that you can manipulate and write to `this.outputPath`. Broccoli will handle the state of these 
+directories and passing them between plugins.
 
 ### Nodes
 
-Snapshot of the filesystem, come in 2 flavors.
+Nodes represent either a source directory or a plugin. They are like
+[nodes in a graph](https://en.wikipedia.org/wiki/Vertex_(graph_theory)) or a network. Nodes are connected together with
+one/many inputs and a single output. Internally, nodes are wrapped in a consistent interface called a `NodeWrapper` 
+which Broccoli uses to maintain the filesystem state for each node.
+
+Nodes come in 2 flavors:
 
 **Source nodes**:
 
@@ -84,14 +116,20 @@ Snapshot of the filesystem, come in 2 flavors.
 
 **Transform nodes**:
 
+* Are plugins
 * Take node(s) as input
 * Cacheable
 * Persistable
 
-
-### Plugins
-
-
+The majority of nodes within the build graph will be transform nodes, with source nodes only used for input directories.
+Internally, Broccoli wraps source nodes in a "source" plugin that connects the `inputPath` directly to the `outputPath`.
 
 ### Trees
 
+As nodes accept one or more inputs and emit a single output, and the entire build pipeline will write to a single output
+directory, when connected together they form a sort of "tree" structure. 
+Broccoli constructs this tree of connected nodes in memory as it parses the `Brocfile`, and sets up the filesystem 
+state for each node, creating an `outputPath` for each node to write to.
+
+You may often encounter the term "tree" when reading plugin READMEs or in tutorials, just remember a tree is a connected
+set of plugins/nodes.
