@@ -25,13 +25,13 @@ your files, only input and output directories.
 
 ## Thinking in Broccoli
 
-Broccoli at its heart is very simple, it handles managing the file-system state, and simply takes input files and
-passes them as inputs to plugins, and takes the output from each plugin and passes it as an input to the next one. The
-order in which these operations happen is determined by the build file, that you're going to learn how to create.
+Broccoli at its heart is very simple. It's really just a set of connected file transformations, performed by plugins,
+that manipulate files from one or multiple inputs, into a single output. Each plugin is responsible for processing files
+passed to it in input directories, and writing files to its output directory.
 
-Under the hood, Broccoli requires only a single input directory, and and output directory. If any plugins are used in
-between the input directory and the output directory, Broccoli will create directories for each plugin to write their 
-output to, and provide those output directories as input(s) to other plugins.
+Broccoli handles managing the file-system state, and simply takes input files and passes them as inputs to plugins, 
+and takes the output from each plugin and passes it as an input to the next one. The order in which these operations 
+happen is determined by the build file, a `Brocfile.js` that you're going to learn how to create.
 
 You can think of Broccoli much like a simple programming language, where the output of a function can be passed as the
 input(s) to another function.
@@ -110,7 +110,7 @@ Nodes come in 2 flavors:
 
 **Source nodes**:
 
-* Map to a “source” directory
+* Map to a "source" directory
 * Can be watched/unwatched
 * Can trigger a rebuild
 
@@ -124,6 +124,10 @@ Nodes come in 2 flavors:
 The majority of nodes within the build graph will be transform nodes, with source nodes only used for input directories.
 Internally, Broccoli wraps source nodes in a "source" plugin that connects the `inputPath` directly to the `outputPath`.
 
+Source nodes are automatically created when a string is passed as an input to a plugin, Broccoli auto-converts this into
+a [source plugin](https://github.com/broccolijs/broccoli-source) that maps its input directory to its output directory
+and allows Broccoli to be notified when files change within the input directory.
+
 ### Trees
 
 As nodes accept one or more inputs and emit a single output, and the entire build pipeline will write to a single output
@@ -133,3 +137,50 @@ state for each node, creating an `outputPath` for each node to write to.
 
 You may often encounter the term "tree" when reading plugin READMEs or in tutorials, just remember a tree is a connected
 set of plugins/nodes.
+
+## Building
+
+Broccoli build pipelines are defined using a `Brocfile.js` file in the root of the project. This `js` file sets up the 
+build graph, connecting source directories via plugins, and exports a single node whose output will be written to the
+target directory. Broccoli will then handle wiring up all of the nodes inputs and outputs into a graph (from the end 
+node up to the start nodes), creating temporary directories as it goes, linking inputs to outputs between plugins using 
+symlinks to make them super fast, run the build and invoke the `build()` method on each plugin, and finally resolve all
+the symlinks and write the files from the final node into the destination build directory.
+
+Confused? Here's an example:
+
+```js
+const mergeTrees = require("broccoli-merge-trees"); // broccoli merge-trees plugin
+module.exports = mergeTrees(["dir1", "dir2"]);
+```
+
+This is a very simple `Brocfile.js` that merely merges the contents of `dir1` and `dir2` into the output
+directory. The node graph would be represented as follows:
+
+```
+source node
+            =====> transform node
+source node
+------------------------
+/dir1 => source node 1
+/dir2 => source node 2
+mergeTrees(
+    'dir1', => source node, implicitly created when using a string as an input
+    'dir2' => source node, implicitly created when using a string as an input
+)
+module.exports = transformation node with input nodes dir1 and dir2
+```
+
+Thus `module.exports` contains a node that references the two input nodes, and an output path that will contain the
+contents of `dir1` and `dir2` when the `build` command is run. The two input nodes reference two source directories,
+`dir1` and `dir2`.
+
+## Serving
+
+One last thing. Broccoli comes with a built in development server, that provides an HTTP server to host your assets
+in development, and perform rebuilds when source directories (nodes) change.
+
+The local HTTP server runs on `http://localhost:4200`
+
+Ok, that pretty much wraps up the basics, let's continue on an learn how to setup a Broccoli build pipeline in the
+[Getting Started](/getting-started.html) guide.
