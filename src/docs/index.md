@@ -45,8 +45,8 @@ const merge = require('broccoli-merge-trees');
 
 const appRoot = 'app';
 
-const css = compileSass([appRoot], 'styles/app.scss', 'assets/app.css');
-const js = babel(appRoot);
+const styles = compileSass([appRoot], 'styles/app.scss', 'assets/app.css');
+const scripts = babel(appRoot);
 
 module.exports = merge([styles, scripts]);
 ```
