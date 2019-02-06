@@ -2,7 +2,7 @@
 title: What is Broccoli?
 ---
 
-Broccoli is a simple JavaScript build tool, that allows you to configure your build pipeline in Javascript (like
+Broccoli is a simple JavaScript build tool, that allows you to configure your build pipeline in JavaScript (like
 you're already used to writing), and handles setting up the filesystem state for each transformation that's 
 going to happen.
 
@@ -19,7 +19,7 @@ Broccoli.js is different to other build tools. You may be used to tools like [Gr
 runner), [Gulp](https://gulpjs.com/) (streams and pipes) or [Webpack](https://webpack.js.org/) (a module bundler),
 these all operate on different levels to Broccoli.
 
-Broccoli works at the file-system level, it provides a Javascript API to wrap other node tools like
+Broccoli works at the file-system level, it provides a JavaScript API to wrap other node tools like
 [Babel](https://babeljs.io/), [Rollup](https://rollupjs.org/) or [Node-Sass](https://github.com/sass/node-sass), 
 [Webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), and many more. These tools operate on a
 set of input files, and emit output files, that is all. Broccoli has no knowledge of the contents of your 
@@ -28,9 +28,9 @@ files, only input and output directories.
 ## Thinking in Broccoli
 
 Broccoli at its heart is very simple. It is really just a set of directories, connected together by a plugin
-system. This plugin systems allow behavior between two directories to be described. Broccoli then ensures 
-plugins are called at the appropriate time, to ensure the build is successful, and writes the result to a 
-`target` directory. Each plugin is responsible for processing files passed to it in input directories, and 
+system. This plugin systems allow behavior between input and output directories to be described. Broccoli then
+ensures plugins are called at the appropriate time, to ensure the build is successful, and writes the result to
+a `target` directory. Each plugin is responsible for processing files passed to it in input directories, and 
 writing files to its output directory.
 
 Broccoli doesn't really care about files, it simply takes source directories and passes them as inputs to 
@@ -78,10 +78,10 @@ Additionally, a `src/styles` directory and the input file `site.scss` is passed 
 vendor  prefixes (like `-ms` or `-webkit`) to attributes, which is then in turn passed into the `merge()` plugin.
 
 The `merge()` plugin will copy the contents of each of its inputs into its output directory. Thus, it merges our 
-uglified Javascript and out vendor prefixed css. This then becomes our final output and is what is written to 
+uglified JavaScript and out vendor prefixed css. This then becomes our final output and is what is written to 
 our target (destination) directory.
 
-This should all be fairly familiar to you if you've ever written Javascript (or any programming language for that
+This should all be fairly familiar to you if you've ever written JavaScript (or any programming language for that
 matter) before, it's just inputs and output.
 
 ## Thinking in Broccoli
@@ -89,7 +89,6 @@ matter) before, it's just inputs and output.
 There are 3 main concepts to get your head around when using Broccoli:
 
 * [Plugins](#plugins)
-* [Nodes](#nodes)
 * [Trees](#trees)
 
 ### Plugins
@@ -113,40 +112,19 @@ class MyPlugin extends Plugin
 }
 ```
 
-Basic plugins are super simple, anything you can do in node, you can do in the `build()` method. A plugin can
-receive one or multiple inputs, and these are available in the `this.inputPaths` array in the order they are 
-provided. `this.inputPaths` contains paths to directories, that are the `outputPath` of previous plugins. Each 
-`inputPath` contains files that you can manipulate and write to `this.outputPath`. Broccoli will handle the 
-state of these directories and passing them between plugins.
+A broccoli-plugin has only 1 purpose to transform the files from `this.inputPaths` directories to their output
+directory in this.outputPath directory when its `build()` function is invoked. Anything you can do in node, 
+you can do in the `build()` method. A plugin can receive one or multiple inputs, and these are available in the 
+`this.inputPaths` array in the order they are provided. `this.inputPaths` contains paths to directories, that are
+the `outputPath` of previous plugins. Each `inputPath` contains files that you can manipulate and write to
+`this.outputPath`. Broccoli will handle the state of these directories and passing them between plugins.
 
 There is a special case where a `string` is passed as an input to a plugin. When parsing your build pipeline, 
 Broccoli will automatically convert a string input into a
 [source plugin](https://github.com/broccolijs/broccoli-source). This plugin basically connects its input directory
-directly to its output directory, and optionally allows Broccoli to be notified when files within the input 
-directory change and trigger a rebuild.
-
-### Nodes
-
-Nodes represent either a source directory or a plugin. They are like
-[nodes in a graph](https://en.wikipedia.org/wiki/Vertex_(graph_theory)) or a network. Nodes are connected together
-with one/many inputs and a single output.
-
-Nodes come in 2 flavors:
-
-**Source nodes (strings)**:
-
-* Map to a "source" directory
-* Can be watched/unwatched
-* Can trigger a rebuild
-
-**Transform nodes (plugins)**:
-
-* Take node(s) as input
-* Are cacheable (within a single build)
-* Are persistable (between builds)
-
-The majority of nodes within the build graph will be transform nodes, with source nodes only used for source
-directories. 
+directly to its output directory, and also allows Broccoli to `watch` and be notified when files within the input
+directory change and trigger a rebuild. You can also manually create an `unwatched` directory from a string by
+using [UnwatchedDir](https://github.com/broccolijs/broccoli-source#new-unwatcheddirdirectorypath-options).
 
 ### Trees
 
