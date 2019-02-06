@@ -86,7 +86,7 @@ matter) before, it's just inputs and output.
 
 ## Thinking in Broccoli
 
-There are 3 main concepts to get your head around when using Broccoli:
+There are 2 main concepts to get your head around when using Broccoli:
 
 * [Plugins](#plugins)
 * [Trees](#trees)
