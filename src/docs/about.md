@@ -1,39 +1,91 @@
 ---
-title: What is Broccoli?
+title: What is Broccoli.js?
 ---
 
-Broccoli is a simple JavaScript build tool, that allows you to configure your build pipeline in JavaScript (like
-you're already used to writing), and handles setting up the filesystem state for each transformation that's 
-going to happen.
+Broccoli is a JavaScript build tool. A build tool is a piece of software that is responsible for assembling your
+applications assets (JavaScript, CSS, images, etc) into some distributable form, usually to run in a browser.
+All configuration is done in JavaScript (no confusing/messy config files) via a modular plugin architecture.
 
 ${toc}
 
 ## What is a build tool?
 
-A build tool's job is to take input files (your javascript, css, html, etc), to process them and output the result
+A build tool's job is to take input files (your JavaScript, CSS, HTML, etc), to process them and output the result
 of those transformations, usually into some distributable form. Typically this will involve things like JavaScript 
 transformations to allow you to write newer syntax that will work in a browser, to use a CSS pre-processor like 
 Sass for your CSS, etc.
 
-Broccoli.js is different to other build tools. You may be used to tools like [Grunt](https://gruntjs.com/) (a task
-runner), [Gulp](https://gulpjs.com/) (streams and pipes) or [Webpack](https://webpack.js.org/) (a module bundler),
-these all operate on different levels to Broccoli.
+Broccoli.js is different from other build tools. You may be used to tools like [Grunt](https://gruntjs.com/) (a 
+task runner), [Gulp](https://gulpjs.com/) (streams and pipes) or [Webpack](https://webpack.js.org/) (a module 
+bundler), these all aim to solve different problems than what Broccoli what built for.
 
-Broccoli works at the file-system level, it provides a JavaScript API to wrap other node tools like
-[Babel](https://babeljs.io/), [Rollup](https://rollupjs.org/) or [Node-Sass](https://github.com/sass/node-sass), 
-[Webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), and many more. These tools operate on a
-set of input files, and emit output files, that is all. Broccoli has no knowledge of the contents of your 
-files, only input and output directories.
+Broccoli provides a modular plugin API to leverage other Node tools. Tools like [Babel](https://babeljs.io/),
+[Rollup](https://rollupjs.org/), [Node-Sass](https://github.com/sass/node-sass), 
+[Webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), and many more can easily be used with 
+Broccoli. These tools perform the actual work by transforming files, Broccoli merely connects inputs to outputs.
 
 ## Thinking in Broccoli
 
-Broccoli at its heart is very simple. It is really just a set of directories, connected together by a plugin
-system. This plugin systems allow behavior between input and output directories to be described. Broccoli then
-ensures plugins are called at the appropriate time, to ensure the build is successful, and writes the result to
-a `target` directory. Each plugin is responsible for processing files passed to it in input directories, and 
-writing files to its output directory.
+Using the above tools in a standalone fashion is relatively straight forward, they read input files, and write 
+to output files. The difficulty comes when connecting different tools together. The only common interface 
+between them is the file system.
 
-Broccoli doesn't really care about files, it simply takes source directories and passes them as inputs to 
+Say we want to concatenate our JavaScript files, minify them, and copy the results to our build directory:
+
+```js
+const fs = require('fs');
+const path = require('path');
+const minify = require('minify');
+const readDir = require('./readDir');
+const readFiles = require('./readFiles');
+
+function concatFiles(sourceDir, outputFile) {
+    const output = readDir(sourceFiles).reduce((output, file) => output += `;${file.content}`, '');
+    fs.writeFileSync(outputFile, output)
+}
+
+function minifyFiles(sourceFiles, outputDir) {
+    return readFiles(sourceFiles).map(file => {
+        const minified = minify(file.path);
+        const outputFile = `${outputDir}/${file.name}.min.${file.extension}`;
+        fs.writeFileSync(outputFile, minified)
+        return outputFile;
+    })
+}
+
+function copyFiles(sourceFiles, outputDir) {
+    sourceFiles.forEach(filePath => {
+        const file = path.basename(filePath);
+        fs.createReadStream(path).pipe(fs.createWriteStream(`${outputDir}/${file}`));
+    });
+}
+
+const concatted = concatFiles('app', '/tmp/concat-files')
+const minified = minifyFiles(concatted, '/tmp/minified-files')
+copyFiles(minified, './build');
+```
+
+The above is all well and good, but notice how we have to handle the state between each operation. Now imagine how
+this scales as our build pipeline grows, that's lots of temp directories and file state handling that you have 
+to handle.
+
+Broccoli works by managing of a set of directories, connected together by plugins, which describe how files 
+are moved or transformed at each step of the build process. Broccoli ensures plugins are called in the prescribed
+order, and writes the result to a `target` directory. Each plugin is responsible for processing files passed to 
+it in input directories, and writing files to its output directory. This allows you to focus on the 
+transformations and now how files are passed between each plugin.
+
+For example:
+```sh
+app                                                       [target]
+ └─ src                                                    │
+ │   ├─ index.js   --> ConcatPlugin() ┐                    │
+ │   └─ other.js                      ├─ MergePlugin() --> └─ prod.build-20190206.js
+ └─ styles                            │
+     └─ sites.scss --> SassPlugin() ──┘
+```
+
+Broccoli itself doesn't really care about files, it simply takes source directories and passes them as inputs to 
 plugins, creates an output directory for the plugin to write to, and passes that output directory it as an input
 to the next plugin.
 
@@ -94,8 +146,8 @@ There are 2 main concepts to get your head around when using Broccoli:
 ### Plugins
 
 Plugins are what a build pipeline developer will interact with most. Plugins are what do the actual work of
-transforming input files into output files. The API of a plugin is pretty simple, all that's required is creating
-a class that extends the [broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class, and
+transforming files at each step of build process. The API of a plugin is pretty simple, all that's required is
+creating a class that extends the [broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class, and
 implementing a `build()` method, that performs some work or returns a promise.
 
 ```js
@@ -112,7 +164,7 @@ class MyPlugin extends Plugin
 }
 ```
 
-A broccoli-plugin has only 1 purpose to transform the files from `this.inputPaths` directories to their output
+A broccoli-plugin has only one purpose to transform the files from `this.inputPaths` directories to their output
 directory in this.outputPath directory when its `build()` function is invoked. Anything you can do in node, 
 you can do in the `build()` method. A plugin can receive one or multiple inputs, and these are available in the 
 `this.inputPaths` array in the order they are provided. `this.inputPaths` contains paths to directories, that are
