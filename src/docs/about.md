@@ -26,9 +26,17 @@ Broccoli. These tools perform the actual work by transforming files, Broccoli me
 
 ## Thinking in Broccoli
 
+There are 3 main concepts to get your head around when using Broccoli:
+
+* [Directories](#directories)
+* [Plugins](#plugins)
+* [Trees](#trees)
+
+### Directories
+
 Using the above tools in a standalone fashion is relatively straight forward, they read input files, and write 
-to output files. The difficulty comes when connecting different tools together. The only common interface 
-between them is the file system.
+to output files. The difficulty comes when connecting different tools together as you need to manage all the 
+interim state yourself. The only common interface between them is the file system.
 
 Say we want to concatenate our JavaScript files, minify them, and copy the results to our build directory:
 
@@ -66,8 +74,8 @@ copyFiles(minified, './build');
 ```
 
 The above is all well and good, but notice how we have to handle the state between each operation. Now imagine how
-this scales as our build pipeline grows, that's lots of temp directories and file state handling that you have 
-to handle.
+this scales as our build pipeline grows, adding in Sass compilation, JavaScript transpilation (Babel), 
+fingerprinting, etc. That's lots of temp directories and file state that you have to handle.
 
 Broccoli works by managing of a set of directories, connected together by plugins, which describe how files 
 are moved or transformed at each step of the build process. Broccoli ensures plugins are called in the prescribed
@@ -135,13 +143,6 @@ our target (destination) directory.
 
 This should all be fairly familiar to you if you've ever written JavaScript (or any programming language for that
 matter) before, it's just inputs and output.
-
-## Thinking in Broccoli
-
-There are 2 main concepts to get your head around when using Broccoli:
-
-* [Plugins](#plugins)
-* [Trees](#trees)
 
 ### Plugins
 
