@@ -71,7 +71,7 @@ Open the `Brocfile.js` and it should contain the contents:
 module.exports = "src";
 ```
 
-Next, add an `index.html` file with the contents `Eat your greens!`.
+Next, add an `index.html` file with the contents `Hello World!`.
 
 ```sh
 echo 'Hello World!' > src/index.html

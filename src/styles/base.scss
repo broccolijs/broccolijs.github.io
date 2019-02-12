@@ -92,10 +92,10 @@ a:hover {
 p {
   code {
     background: $color-off-white;
-    border: 1px solid $color-light-grey;
     border-radius: 3px;
-    color: $color-red;
-    padding: 2px 5px;
+    color: $color-light-black;
+    font-size: 85%;
+    padding: .2em .4em;
   }
 }
 
