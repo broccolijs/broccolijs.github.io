@@ -13,7 +13,7 @@ const isProduction = env === 'production';
 
 const appRoot = 'src';
 
-const markdown = new md(`${appRoot}/docs`, `${appRoot}/templates`, {
+const markdown = new md(`${appRoot}/content`, `${appRoot}/templates`, {
   data: {
     title: 'broccoli.build',
     description: 'Broccoli.js - The asset pipeline for ambitious web applications',
