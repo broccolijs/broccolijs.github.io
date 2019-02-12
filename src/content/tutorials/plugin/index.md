@@ -9,6 +9,8 @@ transforming files at each step of build process. The API of a plugin requires j
 extends the [broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class, and implementing a 
 `build()` method, that performs some work and/or returns a promise.
 
+${toc}
+
 Let's have a look at the basic building blocks of a Broccoli plugin.
 
 # Broccoli-Plugin base class
