@@ -5,6 +5,10 @@ body {
     border-bottom: 1px solid $color-dark-green;
     text-align: center;
 
+    ul {
+      margin: 0;
+    }
+
     li {
       display: inline-block;
       vertical-align: middle;
@@ -13,6 +17,10 @@ body {
         color: $color-white;
         display: inline-block;
         padding: 10px;
+
+        &:visited {
+          color: $color-white;
+        }
       }
     }
   }
