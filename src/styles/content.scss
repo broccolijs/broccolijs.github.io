@@ -9,4 +9,23 @@ body {
   > footer {
     text-align: center;
   }
+
+  .header-anchor {
+    color: $color-dark-grey;
+    display: none;
+    text-decoration: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    &:hover {
+      .header-anchor {
+        display: inline;
+      }
+    }
+  }
 }
