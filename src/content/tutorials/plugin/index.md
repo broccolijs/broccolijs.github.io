@@ -104,7 +104,8 @@ class ConcatPlugin extends Plugin
         super(inputNodes, options);
         
         this.fileMatchers = options.globs || ['**/*'];
-        this.joinSeparator = '';
+        this.joinSeparator = "\n";
+        this.outputFile = 'concat';
     }
     
     build() {
@@ -117,11 +118,11 @@ class ConcatPlugin extends Plugin
         const content = this.inputPaths
             .reduce((output, inputPath) => output +
                 walkSync(inputPath, options)
-                .map(file => fs.readFileSync(file, { encoding: 'UTF-8' }))
-                .join(this.joinSeparator),
+                    .map(file => fs.readFileSync(file, { encoding: 'UTF-8' }))
+                    .join(this.joinSeparator),
             '');
 
-        fs.writeFileSync(`${this.outputPath}/output.js`, content);
+        fs.writeFileSync(`${this.outputPath}/${this.outputFile}`, content);
     }
 }
 
