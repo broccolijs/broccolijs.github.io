@@ -170,7 +170,7 @@ directory in `this.outputPath` directory when its `build()` function is invoked.
 you can do in the `build()` method. A plugin can receive one or multiple inputs, and these are available in the 
 `this.inputPaths` array in the order they are provided. `this.inputPaths` contains paths to directories, that are
 the `outputPath` of previous plugins. Each `inputPath` contains files that you can manipulate and write to
-`this.outputPath`. Broccoli will handle the state of these directories and passing them between plugins.
+`this.outputPath`. Broccoli will handle the state of these directories and take responsibility for passing them between plugins.
 
 There is a special case where a `string` is passed as an input to a plugin. When parsing your build pipeline, 
 Broccoli will automatically convert a string input into a
