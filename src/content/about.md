@@ -81,16 +81,17 @@ Broccoli works by managing of a set of directories, connected together by plugin
 are moved or transformed at each step of the build process. Broccoli ensures plugins are called in the prescribed
 order, and writes the result to a `target` directory. Each plugin is responsible for processing files passed to 
 it in input directories, and writing files to its output directory. This allows you to focus on the 
-transformations and now how files are passed between each plugin.
+transformations and not how files are passed between each plugin.
 
 For example:
 ```sh
 app                                                       [target]
- └─ src                                                    │
+ ├─ src                                                    │
  │   ├─ index.js   --> ConcatPlugin() ┐                    │
- │   └─ other.js                      ├─ MergePlugin() --> └─ prod.build-20190206.js
- └─ styles                            │
-     └─ sites.scss --> SassPlugin() ──┘
+ │   └─ other.js                      ├─ MergePlugin() --> ├─ prod.js
+ └─ styles                            │                    └─ site.css
+     ├─ site.scss  --> SassPlugin() ──┘
+     └─ layout.scss 
 ```
 
 Broccoli itself doesn't really care about files, it simply takes source directories and passes them as inputs to 
@@ -99,7 +100,7 @@ to the next plugin.
 
 Broccoli is configured with a file in the root of your project called `Brocfile.js`. This file defines the build
 pipeline for your application, and is written in plain old JavaScript. The order in which operations happen is
-determined by this build file.
+determined by this build file. All that is required is that `module.exports` returns a plugin/string.
 
 You can think of broccoli-plugins much like a simple programming language, where the output of a function can be 
 passed as the input(s) to another function.
@@ -159,46 +160,61 @@ class MyPlugin extends Plugin
   build() {
     // A plugin can receive single or multiple inputs nodes/directories
     // The files are available in this.inputPaths[0]/this.inputPaths[1]...
-    // You can do anything with these files that you can do in node
+    // You can do anything with these files that you can do in Node
     // The output of your plugin must write to this.outputPath
   }
 }
 ```
 
-A broccoli-plugin has only one purpose to transform the files from `this.inputPaths` directories to their output
-directory in `this.outputPath` directory when its `build()` function is invoked. Anything you can do in node, 
-you can do in the `build()` method. A plugin can receive one or multiple inputs, and these are available in the 
-`this.inputPaths` array in the order they are provided. `this.inputPaths` contains paths to directories, that are
-the `outputPath` of previous plugins. Each `inputPath` contains files that you can manipulate and write to
-`this.outputPath`. Broccoli will handle the state of these directories and take responsibility for passing them between plugins.
+A broccoli-plugin has only one purpose, to transform the files from its `this.inputPaths` directories to its
+`this.outputPath` directory when its `build()` function is invoked. Anything you can do in Node, you can do in
+the `build()` method. A plugin can receive one or multiple inputs, and these are available in the `this.inputPaths`
+array in the order they are provided.
+
+`this.inputPaths` contains paths to directories, that are the `outputPath` of previous plugins. Each `inputPath`
+contains files that you can manipulate and write to `this.outputPath`. Broccoli will handle the state of these
+directories and take responsibility for passing them between plugins.
 
 There is a special case where a `string` is passed as an input to a plugin. When parsing your build pipeline, 
 Broccoli will automatically convert a string input into a
 [source plugin](https://github.com/broccolijs/broccoli-source). This plugin basically connects its input directory
 to its output directory, and also allows Broccoli to `watch` and be notified when files within the input
 directory change and trigger a rebuild. You can also manually create an `unwatched` directory from a string by
-using [UnwatchedDir](https://github.com/broccolijs/broccoli-source#new-unwatcheddirdirectorypath-options).
+using [UnwatchedDir](https://github.com/broccolijs/broccoli-source#new-unwatcheddirdirectorypath-options), 
+changes in this directory will not trigger a rebuild.
 
 ### Trees
 
-Working from the target directory (the final output) back up to the source directories resembles a tree. Think 
-of a piece of Broccoli and you should have a mental model of what a build pipeline looks like.
+The build pipeline is series of connected plugins, from one or more input directories to a single target directory.
+Working from the target directory (the final output) back up to the source directories resembles a tree. Think of a
+piece of Broccoli and you should have a mental model of what a build pipeline looks like.
 
-Broccoli constructs this tree of connected nodes in memory as it parses the `Brocfile`, and sets up the filesystem 
-state for each node, creating an `outputPath` for each node to write to.
+<div style="text-align: center">
+
+![broccoli tree](/assets/logo/logo-small.png)
+
+</div>
+
+Broccoli parses the result of the `module.exports` from the `Brocfile.js`, and traverses up all of the connected
+nodes all the way to the source directories to produce this tree. 
+
+As Broccoli does this, it sets up the filesystem state for each plugin, creating an `outputPath` for each to write
+to. Broccoli normalizes each plugin into what it calls `nodes`, that contain information about the inputs and 
+output of each item in the build pipeline.
 
 You may often encounter the term "tree" when reading plugin READMEs or in tutorials, just remember a tree is a
-connected set of plugins/nodes.
+connected set of plugins.
 
 ## Building
 
-Broccoli build pipelines are defined using a `Brocfile.js` file in the root of the project. This `js` file sets up
-the build graph, connecting source directories via plugins, and exports a single node whose output will be written
-to the target directory. Broccoli will then handle wiring up all of the nodes inputs and outputs into a graph 
-(from the end node up to the start nodes), creating temporary directories as it goes, linking inputs to outputs 
-between plugins using symlinks to make them super fast, run the build and invoke the `build()` method on each 
-plugin, and finally resolve all the symlinks and write the files from the final node into the destination build 
-directory.
+When Broccoli starts up, the build file `Brocfile.js` file in the root of the project is parsed, from last
+plugin/node up to the source directories. As it does so, Broccoli handles wiring up all of the nodes' inputs and
+outputs into a graph (from the end node up to the start nodes), creating temporary output directories for each 
+as it goes, linking inputs to outputs.
+
+This graph of nodes is held in memory, and reused whenever a rebuild is triggered. When a `build` or `rebuild` 
+is triggered, Broccoli will invoke the `build()` method on each plugin in the order they're defined in the 
+`Brocfile.js`, and finally write the files from the final node into the destination build directory.
 
 Here's an example:
 
@@ -211,9 +227,9 @@ This is a very simple `Brocfile.js` that merely merges the contents of `dir1` an
 directory. The node graph would be represented as follows:
 
 ```
-source node
-            =====> transform node
-source node
+source plugin
+               =====> merge plugin
+source plugin
 ------------------------
 /dir1 => source node 1
 /dir2 => source node 2
@@ -221,12 +237,12 @@ mergeTrees(
     'dir1', => source node, implicitly created when using a string as an input
     'dir2' => source node, implicitly created when using a string as an input
 )
-module.exports = transformation node with input nodes dir1 and dir2
+module.exports = broccoli-merge-trees node with source nodes dir1 and dir2 as inputs
 ```
 
+The two input nodes reference two source directories, `dir1` and `dir2`.
 Thus `module.exports` contains a node that references the two input nodes, and an output path that will contain the
-contents of `dir1` and `dir2` when the `build` command is run. The two input nodes reference two source
-directories, `dir1` and `dir2`.
+contents of `dir1` and `dir2` when the `build` command is run. 
 
 ## Serving
 
