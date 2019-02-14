@@ -175,7 +175,7 @@ the `outputPath` of previous plugins. Each `inputPath` contains files that you c
 There is a special case where a `string` is passed as an input to a plugin. When parsing your build pipeline, 
 Broccoli will automatically convert a string input into a
 [source plugin](https://github.com/broccolijs/broccoli-source). This plugin basically connects its input directory
-directly to its output directory, and also allows Broccoli to `watch` and be notified when files within the input
+to its output directory, and also allows Broccoli to `watch` and be notified when files within the input
 directory change and trigger a rebuild. You can also manually create an `unwatched` directory from a string by
 using [UnwatchedDir](https://github.com/broccolijs/broccoli-source#new-unwatcheddirdirectorypath-options).
 
