@@ -200,7 +200,7 @@ between plugins using symlinks to make them super fast, run the build and invoke
 plugin, and finally resolve all the symlinks and write the files from the final node into the destination build 
 directory.
 
-Confused? Here's an example:
+Here's an example:
 
 ```js
 const mergeTrees = require("broccoli-merge-trees"); // broccoli merge-trees plugin
