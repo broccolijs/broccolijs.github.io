@@ -166,7 +166,7 @@ class MyPlugin extends Plugin
 ```
 
 A broccoli-plugin has only one purpose to transform the files from `this.inputPaths` directories to their output
-directory in this.outputPath directory when its `build()` function is invoked. Anything you can do in node, 
+directory in `this.outputPath` directory when its `build()` function is invoked. Anything you can do in node, 
 you can do in the `build()` method. A plugin can receive one or multiple inputs, and these are available in the 
 `this.inputPaths` array in the order they are provided. `this.inputPaths` contains paths to directories, that are
 the `outputPath` of previous plugins. Each `inputPath` contains files that you can manipulate and write to
