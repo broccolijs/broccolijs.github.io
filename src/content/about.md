@@ -98,7 +98,7 @@ plugins, creates an output directory for the plugin to write to, and passes that
 to the next plugin.
 
 Broccoli is configured with a file in the root of your project called `Brocfile.js`. This file defines the build
-pipeline for your application, and is written in plan old JavaScript. The order in which operations happen is
+pipeline for your application, and is written in plain old JavaScript. The order in which operations happen is
 determined by this build file.
 
 You can think of broccoli-plugins much like a simple programming language, where the output of a function can be 
