@@ -6,6 +6,10 @@ module.exports = [
     url: '/',
   },
   {
+    title: 'About',
+    url: '/about.html',
+  },
+  {
     title: 'Getting Started',
     url: '/getting-started.html',
   },
