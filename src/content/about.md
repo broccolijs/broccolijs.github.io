@@ -41,11 +41,11 @@ interim state yourself. The only common interface between them is the file syste
 Say we want to concatenate our JavaScript files, minify them, and copy the results to our build directory:
 
 ```js
-const fs = require('fs');
-const path = require('path');
-const minify = require('minify');
-const readDir = require('./readDir');
-const readFiles = require('./readFiles');
+import fs from 'fs';
+import path from 'path';
+import minify from 'minify';
+import readDir from './readDir';
+import readFiles from './readFiles';
 
 function concatFiles(sourceDir, outputFile) {
     const output = readDir(sourceFiles).reduce((output, file) => output += `;${file.content}`, '');
@@ -74,13 +74,13 @@ copyFiles(minified, './build');
 ```
 
 The above is all well and good, but notice how we have to handle the state between each operation. Now imagine how
-this scales as our build pipeline grows, adding in Sass compilation, JavaScript transpilation (Babel), 
+this scales as our build pipeline grows, adding in Sass compilation, JavaScript transpilation (Babel),
 fingerprinting, etc. That's lots of temp directories and file state that you have to handle.
 
-Broccoli works by managing of a set of directories, connected together by plugins, which describe how files 
+Broccoli works by managing of a set of directories, connected together by plugins, which describe how files
 are moved or transformed at each step of the build process. Broccoli ensures plugins are called in the prescribed
-order, and writes the result to a `target` directory. Each plugin is responsible for processing files passed to 
-it in input directories, and writing files to its output directory. This allows you to focus on the 
+order, and writes the result to a `target` directory. Each plugin is responsible for processing files passed to
+it in input directories, and writing files to its output directory. This allows you to focus on the
 transformations and not how files are passed between each plugin.
 
 For example:
@@ -91,10 +91,10 @@ app                                                       [target]
  │   └─ other.js                      ├─ MergePlugin() --> ├─ prod.js
  └─ styles                            │                    └─ site.css
      ├─ site.scss  --> SassPlugin() ──┘
-     └─ layout.scss 
+     └─ layout.scss
 ```
 
-Broccoli itself doesn't really care about files, it simply takes source directories and passes them as inputs to 
+Broccoli itself doesn't really care about files, it simply takes source directories and passes them as inputs to
 plugins, creates an output directory for the plugin to write to, and passes that output directory it as an input
 to the next plugin.
 
@@ -102,48 +102,58 @@ Broccoli is configured with a file in the root of your project called `Brocfile.
 pipeline for your application, and is written in plain old JavaScript. The order in which operations happen is
 determined by this build file. All that is required is that `module.exports` returns a plugin/string.
 
-You can think of broccoli-plugins much like a simple programming language, where the output of a function can be 
+You can think of broccoli-plugins much like a simple programming language, where the output of a function can be
 passed as the input(s) to another function.
 
 E.g.:
 
 ```js
-let js = babel('src');
-js = uglify(js);
+export default (options) => {
+    let js = babel('src');
+    js = uglify(js);
 
-let css = sass('src/styles', 'site.scss');
-css = autoprefixer(css);
+    let css = sass('src/styles', 'site.scss');
+    css = autoprefixer(css);
 
-const result = merge([js, css]);
-
-module.exports = result;
+    return merge([js, css]);
+};
 ```
+
 This could also be expressed as:
 ```js
-module.exports = merge([
-    uglify(
-        babel('src')
-    ),
-    autoprefixer(
-        sass('src/styles', 'site.scss')
-    )
-]);
+export default (options) => {
+     return merge([
+        uglify(
+            babel('src')
+        ),
+        autoprefixer(
+            sass('src/styles', 'site.scss')
+        )
+    ])
+};
 ```
 
-In the above, a `src` directory is passed to the `babel()` plugin (which will convert our new ES6 syntax into 
-ES5 that runs in the browser), the output of that is passed to the `uglify()` plugin which will minify our JS 
+In the above, a `src` directory is passed to the `babel()` plugin (which will convert our new ES6 syntax into
+ES5 that runs in the browser), the output of that is passed to the `uglify()` plugin which will minify our JS
 into a smaller format. The output of `uglify()` will in turn be passed as 1 input to `merge()`.
 
 Additionally, a `src/styles` directory and the input file `site.scss` is passed to `sass()` which will convert your
 `.scss` files into `.css` files, its output (your css) is passed as an input to `autoprefixer()` which will add
 vendor  prefixes (like `-ms` or `-webkit`) to attributes, which is then in turn passed into the `merge()` plugin.
 
-The `merge()` plugin will copy the contents of each of its inputs into its output directory. Thus, it merges our 
-uglified JavaScript and out vendor prefixed css. This then becomes our final output and is what is written to 
+The `merge()` plugin will copy the contents of each of its inputs into its output directory. Thus, it merges our
+uglified JavaScript and out vendor prefixed css. This then becomes our final output and is what is written to
 our target (destination) directory.
+
+Finally, the `export default () => ` line exports a function that Broccoli will invoke with an `options` object,
+that contains an `env` property to indicate the environment. This is set from the `--environment` CLI argument and
+defaults to `development`.
 
 This should all be fairly familiar to you if you've ever written JavaScript (or any programming language for that
 matter) before, it's just inputs and output.
+
+Note: [ES Modules](https://nodejs.org/api/esm.html) syntax is supported by Broccoli in the current master. Prior
+to this, standard CommonJs syntax with `require` and `module.exports` should be used.
 
 ### Plugins
 
@@ -153,7 +163,7 @@ creating a class that extends the [broccoli-plugin](https://github.com/broccolij
 implementing a `build()` method, that performs some work or returns a promise.
 
 ```js
-const Plugin = require('broccoli-plugin');
+import Plugin from 'broccoli-plugin';
 
 class MyPlugin extends Plugin
 {
@@ -175,12 +185,12 @@ array in the order they are provided.
 contains files that you can manipulate and write to `this.outputPath`. Broccoli will handle the state of these
 directories and take responsibility for passing them between plugins.
 
-There is a special case where a `string` is passed as an input to a plugin. When parsing your build pipeline, 
+There is a special case where a `string` is passed as an input to a plugin. When parsing your build pipeline,
 Broccoli will automatically convert a string input into a
 [source plugin](https://github.com/broccolijs/broccoli-source). This plugin basically connects its input directory
 to its output directory, and also allows Broccoli to `watch` and be notified when files within the input
 directory change and trigger a rebuild. You can also manually create an `unwatched` directory from a string by
-using [UnwatchedDir](https://github.com/broccolijs/broccoli-source#new-unwatcheddirdirectorypath-options), 
+using [UnwatchedDir](https://github.com/broccolijs/broccoli-source#new-unwatcheddirdirectorypath-options),
 changes in this directory will not trigger a rebuild.
 
 ### Trees
@@ -195,11 +205,11 @@ piece of Broccoli and you should have a mental model of what a build pipeline lo
 
 </div>
 
-Broccoli parses the result of the `module.exports` from the `Brocfile.js`, and traverses up all of the connected
-nodes all the way to the source directories to produce this tree. 
+Broccoli parses the result of the `export default` from the `Brocfile.js`, and traverses up all of the connected
+nodes all the way to the source directories to produce this tree.
 
 As Broccoli does this, it sets up the filesystem state for each plugin, creating an `outputPath` for each to write
-to. Broccoli normalizes each plugin into what it calls `nodes`, that contain information about the inputs and 
+to. Broccoli normalizes each plugin into what it calls `nodes`, that contain information about the inputs and
 output of each item in the build pipeline.
 
 You may often encounter the term "tree" when reading plugin READMEs or in tutorials, just remember a tree is a
@@ -208,18 +218,19 @@ connected set of plugins.
 ## Building
 
 When Broccoli starts up, the build file `Brocfile.js` file in the root of the project is parsed, from last
-plugin/node up to the source directories. As it does so, Broccoli handles wiring up all of the nodes' inputs and
-outputs into a graph (from the end node up to the start nodes), creating temporary output directories for each 
-as it goes, linking inputs to outputs.
+(target) plugin/node up to the source directories. As it does so, Broccoli handles wiring up all of the nodes'
+inputs and outputs into a graph (from the end node up to the start nodes), creating temporary output directories
+for each as it goes, linking inputs to outputs.
 
-This graph of nodes is held in memory, and reused whenever a rebuild is triggered. When a `build` or `rebuild` 
-is triggered, Broccoli will invoke the `build()` method on each plugin in the order they're defined in the 
-`Brocfile.js`, and finally write the files from the final node into the destination build directory.
+This graph of nodes is held in memory, and reused whenever a rebuild is triggered. When a `build` or `rebuild`
+is triggered, Broccoli will invoke the `build()` method on each plugin in the order they're defined in the
+`Brocfile.js`, building one plugin at a time, and finally write the files from the final node into the
+destination build directory.
 
 Here's an example:
 
 ```js
-const mergeTrees = require("broccoli-merge-trees"); // broccoli merge-trees plugin
+import mergeTrees from "broccoli-merge-trees"; // broccoli merge-trees plugin
 module.exports = mergeTrees(["dir1", "dir2"]);
 ```
 
@@ -237,11 +248,11 @@ mergeTrees(
     'dir1', => source node, implicitly created when using a string as an input
     'dir2' => source node, implicitly created when using a string as an input
 )
-module.exports = broccoli-merge-trees node with source nodes dir1 and dir2 as inputs
+export default () => broccoli-merge-trees node with source nodes dir1 and dir2 as inputs
 ```
 
 The two input nodes reference two source directories, `dir1` and `dir2`.
-Thus `module.exports` contains a node that references the two input nodes, and an output path that will contain the
+Thus `export default` contains a node that references the two input nodes, and an output path that will contain the
 contents of `dir1` and `dir2` when the `build` command is run. 
 
 ## Serving
