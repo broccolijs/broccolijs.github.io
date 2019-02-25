@@ -17,7 +17,7 @@
     <meta property="og:title" content="Getting Started | broccoli.build" />
     <meta property="og:description" content="Broccoli.js - The asset pipeline for ambitious web applications" />
     <meta property="og:type" content="article" />
-    <meta property="og:article:published_time" content="2019-02-12T4:2:80+00:00" />
+    <meta property="og:article:published_time" content="2019-02-25T19:2:29+00:00" />
     <meta property="og:url" content="https://broccoli.build/getting-started.html" />
     <meta property="og:image" content="https://broccoli.build/assets/logo/logo-large-4b34a6c5a21fbbd16639b21ec2e78902.png" />
 </head>
@@ -35,6 +35,7 @@
             </a>
         </li>
             <li><a href="/" title="Home">Home</a></li>
+            <li><a href="/about.html" title="About">About</a></li>
             <li><a href="/getting-started.html" title="Getting Started">Getting Started</a></li>
     </ul>
 </nav>
@@ -64,7 +65,9 @@ these docs will use <code>yarn</code> (note: to use <code>npm</code>, replace <c
 <p>This will install the Broccoli library, and the CLI tool for Broccoli. The CLI tool can optionally be installed globally
 if required, however installing within the project allows for <code>yarn</code> script commands to natively work.</p>
 <p>Next create a <code>Brocfile.js</code> file and an <code>src</code> folder for your source code.</p>
-<pre><code class="hljs language-shell"><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">"module.exports = 'src'"</span> &gt; Brocfile.js &amp;&amp; mkdir src</span>
+<pre><code class="hljs language-shell"><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">"module.exports = 'src'"</span> &gt; Brocfile.js</span>
+<span class="hljs-meta">$</span><span class="bash"> mkdir src</span>
+<span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">'Hello World!'</span> &gt; src/index.html</span>
 </code></pre>
 <p>A <code>Brocfile.js</code> in the project root tells Broccoli how to build your project’s assets. It can be as simple or as
 complicated as your project needs. For this example, we’re going to keep it relatively simple and just build Sass into
@@ -84,9 +87,7 @@ build pipeline.</p>
 <p>Open the <code>Brocfile.js</code> and it should contain the contents:</p>
 <pre><code class="hljs language-js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-string">"src"</span>;
 </code></pre>
-<p>Next, add an <code>index.html</code> file with the contents <code>Hello World!</code>.</p>
-<pre><code class="hljs language-sh"><span class="hljs-built_in">echo</span> <span class="hljs-string">'Hello World!'</span> &gt; src/index.html
-</code></pre>
+<p>Next, open <code>src/index.html</code>, it should have the contents <code>Hello World!</code>.</p>
 <p>That’s it, you’re done.</p>
 <p>The initial setup of this tutorial merely copies files from the input <code>src</code> directory by exporting the string <code>src</code>.</p>
 <p>The <code>Brocfile.js</code> contains the Broccoli configuration for the build. The <code>module.exports</code> line must export a Broccoli
