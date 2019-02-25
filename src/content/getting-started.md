@@ -40,7 +40,9 @@ if required, however installing within the project allows for `yarn` script comm
 Next create a `Brocfile.js` file and an `src` folder for your source code.
 
 ```shell
-$ echo "module.exports = 'src'" > Brocfile.js && mkdir src
+$ echo "module.exports = 'src'" > Brocfile.js
+$ mkdir src
+$ echo 'Hello World!' > src/index.html
 ```
 
 A `Brocfile.js` in the project root tells Broccoli how to build your project's assets. It can be as simple or as
@@ -71,11 +73,7 @@ Open the `Brocfile.js` and it should contain the contents:
 module.exports = "src";
 ```
 
-Next, add an `index.html` file with the contents `Hello World!`.
-
-```sh
-echo 'Hello World!' > src/index.html
-```
+Next, open `src/index.html`, it should have the contents `Hello World!`.
 
 That's it, you're done.
 
