@@ -220,3 +220,110 @@ export default () => concat(['dir1', 'dir2']);
 
 As you can see, there isn't really any magic happening here, it's all standard Node code, just wrapped in a 
 `build()` method that is provided an array of `inputPaths` and an `outputPath` to write to.
+
+# Caching
+
+Adding caching to a plugin is relatively straight forward. Caching allows a plugin to skip its `build()` method
+if it doesn't need to do anything because its inputs have no changed. We can use a couple of node packages to
+achieve this. [fs-tree-diff](https://www.npmjs.com/package/fs-tree-diff) is used to calculate a diff between the
+2 states of a directory, and [walk-sync](https://www.npmjs.com/package/walk-sync) which synchronously walks all
+the files in a directory and produces a list, which is passed to `fs-tree-diff`.
+
+Let's take a look:
+
+```js
+import Plugin from 'broccoli-plugin';
+import FSTree from 'fs-tree-diff';
+import walkSync from 'walk-sync';
+
+export class Cacher extends Plugin
+{
+  constructor (inputNodes, options) {
+    super(inputNodes, {
+      ...options,
+      persistentOutput: true,
+    });
+
+    this._previous = [];
+  }
+
+  _hasChanged() {
+    let changed = false;
+    for (let inputPath of this.inputPaths) {
+      const current = FSTree.fromEntries(walkSync.entries(inputPath));
+      const patch = current.calculatePatch(this._previous[inputPath] || []);
+      this._previous[inputPath] = current;
+
+      if (patch.length) {
+        changed = true;
+      }
+    }
+
+    return changed;
+  }
+
+  build() {
+    if (!this._hasChanged()) {
+      return;
+    }
+
+    // do work
+  }
+}
+
+export default function cacher(...params) {
+  return new Cacher(...params);
+}
+```
+
+Let's examine the above. First off we're importing the packages, nothing exciting there.
+In the `constructor()` we're setting `persistentOutput: true` in the options hash to true, this ensures that 
+Broccoli does not delete the output directory before calling `build()`, we need this so our output is preserved 
+and we can reuse it.
+
+```js
+  constructor (inputNodes, options) {
+    super(inputNodes, {
+      ...options,
+      persistentOutput: true,
+    });
+
+    this._previous = [];
+  }
+```
+
+Next, we've added a `_hasChanged()` method that does our cache state checking. 
+
+```js
+  _hasChanged() {
+    let changed = false;
+    for (let i in this.inputPaths) {
+      const current = FSTree.fromEntries(walkSync.entries(this.inputPaths[i]));
+      const patch = current.calculatePatch(this._previous[i] || []);
+      this._previous[i] = current;
+
+      if (patch.length) {
+        changed = true;
+      }
+    }
+
+    return changed;
+  }
+```
+
+Here, we're iterating each of `this.inputPaths` and using `FSTree.fromEntries()` and `walkSync.entries()` together 
+to produce a `current` state, then calculating a patch which tells us about added/removed/changed files using 
+`calculatePatch()`, and setting `changed` if there are any changes, then returning the `changed` result.
+
+```js
+  build() {
+    if (!this._hasChanged()) {
+      return;
+    }
+
+    // do work
+  }
+```
+
+Then in the `build()` method we simply call `this._hasChanged()` and if nothing has changed, we skip doing any
+further work. That's it, our plugin will now skip doing any work if none of the input files have changed.
