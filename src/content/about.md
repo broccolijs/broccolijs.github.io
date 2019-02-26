@@ -109,7 +109,7 @@ passed as the input(s) to another function.
 E.g.:
 
 ```js
-export default (options) => {
+export default options => {
     let js = babel('src');
     js = uglify(js);
 
@@ -122,7 +122,7 @@ export default (options) => {
 
 This could also be expressed as:
 ```js
-export default (options) => {
+export default options => {
      return merge([
         uglify(
             babel('src')
