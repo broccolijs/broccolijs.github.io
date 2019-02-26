@@ -1,5 +1,3 @@
-'use strict';
-
 import md from './lib/plugin/markdown-handlebars';
 import merge from 'broccoli-merge-trees';
 import broccoliSass from 'broccoli-sass-source-maps';
@@ -13,7 +11,7 @@ import menu from './menu';
 
 const compileSass = broccoliSass(sass);
 
-export default (options) => {
+export default options => {
   const appRoot = 'src';
   const isProduction = options.env === 'production';
 
@@ -22,7 +20,7 @@ export default (options) => {
       title: 'broccoli.build',
       description: 'Broccoli.js - The asset pipeline for ambitious web applications',
       url: 'https://broccoli.build',
-      menu: menu,
+      menu,
     },
   });
 
@@ -57,4 +55,4 @@ export default (options) => {
   }
 
   return tree;
-}
+};
