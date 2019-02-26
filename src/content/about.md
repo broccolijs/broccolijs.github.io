@@ -100,7 +100,8 @@ to the next plugin.
 
 Broccoli is configured with a file in the root of your project called `Brocfile.js`. This file defines the build
 pipeline for your application, and is written in plain old JavaScript. The order in which operations happen is
-determined by this build file. All that is required is that `module.exports` returns a plugin/string.
+determined by this build file. All that is required is that `export default` returns a function that returns a
+plugin/string.
 
 You can think of broccoli-plugins much like a simple programming language, where the output of a function can be
 passed as the input(s) to another function.
@@ -231,7 +232,7 @@ Here's an example:
 
 ```js
 import mergeTrees from "broccoli-merge-trees"; // broccoli merge-trees plugin
-module.exports = mergeTrees(["dir1", "dir2"]);
+export default () => mergeTrees(["dir1", "dir2"]);
 ```
 
 This is a very simple `Brocfile.js` that merely merges the contents of `dir1` and `dir2` into the output

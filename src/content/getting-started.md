@@ -40,7 +40,7 @@ if required, however installing within the project allows for `yarn` script comm
 Next create a `Brocfile.js` file and an `src` folder for your source code.
 
 ```shell
-$ echo "module.exports = 'src'" > Brocfile.js
+$ echo "export default () => 'src'" > Brocfile.js
 $ mkdir src
 $ echo 'Hello World!' > src/index.html
 ```
@@ -64,13 +64,13 @@ You can now run `yarn build` and `yarn serve` for convenience.
 
 ## The build file
 
-Broccoli uses a file called `Brocfile.js` that must live in the root of your project, this is what will contain your
-build pipeline.
+Broccoli uses a file called `Brocfile.js` that must live in the root of your project, this is what will contain
+your build pipeline.
 
 Open the `Brocfile.js` and it should contain the contents:
 
 ```js
-module.exports = "src";
+export default () => "src";
 ```
 
 Next, open `src/index.html`, it should have the contents `Hello World!`.
@@ -79,10 +79,11 @@ That's it, you're done.
 
 The initial setup of this tutorial merely copies files from the input `src` directory by exporting the string `src`.
 
-The `Brocfile.js` contains the Broccoli configuration for the build. The `module.exports` line must export a Broccoli
-node. "But it's a string" you say, yes, Broccoli will automatically convert a string into a `source node`, and on build,
-validate that the directory exists. In this case, the Brocfile merely exports a single node, containing the contents of
-the `src` directory, this will then be copied to the destination directory (`dist` in our case).
+The `Brocfile.js` contains the Broccoli configuration for the build. The `export default` line should export a 
+function that returns a Broccoli node. "But it's a string" you say, yes, Broccoli will automatically convert a 
+string into a `source node`, and on build, validate that the directory exists. In this case, the Brocfile merely
+exports a single node, containing the contents of the `src` directory, this will then be copied to the destination
+directory (`dist` in our case).
 
 To run a build, run `yarn build` (if you added the script) or `broccoli build --overwrite` (note: without `--overwrite`
 the contents of the output directory `dist` will NOT be overwritten and produce an error).
