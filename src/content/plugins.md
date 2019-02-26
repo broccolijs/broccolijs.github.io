@@ -18,8 +18,7 @@ Let's have a look at the basic building blocks of a Broccoli plugin.
 ```js
 import Plugin from 'broccoli-plugin';
 
-class MyPlugin extends Plugin
-{
+class MyPlugin extends Plugin {
     constructor (inputNode, options) {
         super([inputNodes], options);
     }
@@ -103,8 +102,7 @@ import Plugin from 'broccoli-plugin';
 import walkSync from 'walk-sync';
 import fs from 'fs';
 
-export class ConcatPlugin extends Plugin
-{
+export class ConcatPlugin extends Plugin {
     constructor(inputNodes, options) {
         super(inputNodes, options);
         
@@ -145,8 +143,7 @@ and the Node [fs](https://nodejs.org/api/fs.html) package.
 
 After this we define the class and the constructor:
 ```js
-export class ConcatPlugin extends Plugin
-{
+export class ConcatPlugin extends Plugin {
     constructor(inputNodes, options) {
         super(inputNodes, options);
         
@@ -236,8 +233,7 @@ import Plugin from 'broccoli-plugin';
 import FSTree from 'fs-tree-diff';
 import walkSync from 'walk-sync';
 
-export class Cacher extends Plugin
-{
+export class Cacher extends Plugin {
   constructor (inputNodes, options) {
     super(inputNodes, {
       ...options,
