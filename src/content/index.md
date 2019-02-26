@@ -39,16 +39,16 @@ Broccoli provides a simple, functional javascript API for constructing your buil
 ```js
 /* Brocfile.js */
 
-const compileSass = require('broccoli-sass-source-maps')(require('sass'));
-const babel = require('broccoli-babel-transpiler');
-const merge = require('broccoli-merge-trees');
+import compileSass from 'broccoli-sass-source-maps')(require('sass');
+import babel from 'broccoli-babel-transpiler';
+import merge from 'broccoli-merge-trees';
 
 const appRoot = 'app';
 
 const styles = compileSass([appRoot], 'styles/app.scss', 'assets/app.css');
 const scripts = babel(appRoot);
 
-module.exports = merge([styles, scripts]);
+export default () => merge([styles, scripts]);
 ```
 
 The above is an example of a simple Broccoli build pipeline that compiles Sass files and transcodes javascript using
