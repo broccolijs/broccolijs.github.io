@@ -17,7 +17,7 @@
     <meta property="og:title" content="Getting Started | broccoli.build" />
     <meta property="og:description" content="Broccoli.js - The asset pipeline for ambitious web applications" />
     <meta property="og:type" content="article" />
-    <meta property="og:article:published_time" content="2019-02-25T21:2:72+00:00" />
+    <meta property="og:article:published_time" content="2019-02-26T1:2:85+00:00" />
     <meta property="og:url" content="https://broccoli.build/getting-started.html" />
     <meta property="og:image" content="https://broccoli.build/assets/logo/logo-large-4b34a6c5a21fbbd16639b21ec2e78902.png" />
 </head>
@@ -65,7 +65,7 @@ these docs will use <code>yarn</code> (note: to use <code>npm</code>, replace <c
 <p>This will install the Broccoli library, and the CLI tool for Broccoli. The CLI tool can optionally be installed globally
 if required, however installing within the project allows for <code>yarn</code> script commands to natively work.</p>
 <p>Next create a <code>Brocfile.js</code> file and an <code>src</code> folder for your source code.</p>
-<pre><code class="hljs language-shell"><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">"module.exports = 'src'"</span> &gt; Brocfile.js</span>
+<pre><code class="hljs language-shell"><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">"export default () =&gt; 'src'"</span> &gt; Brocfile.js</span>
 <span class="hljs-meta">$</span><span class="bash"> mkdir src</span>
 <span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">'Hello World!'</span> &gt; src/index.html</span>
 </code></pre>
@@ -82,18 +82,19 @@ CSS and Coffeescript into Javascript. We’re also going to assume your project 
 </code></pre>
 <p>You can now run <code>yarn build</code> and <code>yarn serve</code> for convenience.</p>
 <h2 id="the-build-file">The build file <a class="header-anchor" href="#the-build-file" aria-hidden="true">⚭</a></h2>
-<p>Broccoli uses a file called <code>Brocfile.js</code> that must live in the root of your project, this is what will contain your
-build pipeline.</p>
+<p>Broccoli uses a file called <code>Brocfile.js</code> that must live in the root of your project, this is what will contain
+your build pipeline.</p>
 <p>Open the <code>Brocfile.js</code> and it should contain the contents:</p>
-<pre><code class="hljs language-js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-string">"src"</span>;
+<pre><code class="hljs language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> () =&gt; <span class="hljs-string">"src"</span>;
 </code></pre>
 <p>Next, open <code>src/index.html</code>, it should have the contents <code>Hello World!</code>.</p>
 <p>That’s it, you’re done.</p>
 <p>The initial setup of this tutorial merely copies files from the input <code>src</code> directory by exporting the string <code>src</code>.</p>
-<p>The <code>Brocfile.js</code> contains the Broccoli configuration for the build. The <code>module.exports</code> line must export a Broccoli
-node. “But it’s a string” you say, yes, Broccoli will automatically convert a string into a <code>source node</code>, and on build,
-validate that the directory exists. In this case, the Brocfile merely exports a single node, containing the contents of
-the <code>src</code> directory, this will then be copied to the destination directory (<code>dist</code> in our case).</p>
+<p>The <code>Brocfile.js</code> contains the Broccoli configuration for the build. The <code>export default</code> line should export a
+function that returns a Broccoli node. “But it’s a string” you say, yes, Broccoli will automatically convert a
+string into a <code>source node</code>, and on build, validate that the directory exists. In this case, the Brocfile merely
+exports a single node, containing the contents of the <code>src</code> directory, this will then be copied to the destination
+directory (<code>dist</code> in our case).</p>
 <p>To run a build, run <code>yarn build</code> (if you added the script) or <code>broccoli build --overwrite</code> (note: without <code>--overwrite</code>
 the contents of the output directory <code>dist</code> will NOT be overwritten and produce an error).</p>
 <p>You should see something like:</p>

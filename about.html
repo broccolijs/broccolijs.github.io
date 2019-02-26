@@ -17,7 +17,7 @@
     <meta property="og:title" content="What is Broccoli.js? | broccoli.build" />
     <meta property="og:description" content="Broccoli.js - The asset pipeline for ambitious web applications" />
     <meta property="og:type" content="article" />
-    <meta property="og:article:published_time" content="2019-02-25T21:2:72+00:00" />
+    <meta property="og:article:published_time" content="2019-02-26T1:2:85+00:00" />
     <meta property="og:url" content="https://broccoli.build/about.html" />
     <meta property="og:image" content="https://broccoli.build/assets/logo/logo-large-4b34a6c5a21fbbd16639b21ec2e78902.png" />
 </head>
@@ -123,7 +123,8 @@ plugins, creates an output directory for the plugin to write to, and passes that
 to the next plugin.</p>
 <p>Broccoli is configured with a file in the root of your project called <code>Brocfile.js</code>. This file defines the build
 pipeline for your application, and is written in plain old JavaScript. The order in which operations happen is
-determined by this build file. All that is required is that <code>module.exports</code> returns a plugin/string.</p>
+determined by this build file. All that is required is that <code>export default</code> returns a function that returns a
+plugin/string.</p>
 <p>You can think of broccoli-plugins much like a simple programming language, where the output of a function can be
 passed as the input(s) to another function.</p>
 <p>E.g.:</p>
@@ -221,7 +222,7 @@ is triggered, Broccoli will invoke the <code>build()</code> method on each plugi
 destination build directory.</p>
 <p>Here’s an example:</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">import</span> mergeTrees <span class="hljs-keyword">from</span> <span class="hljs-string">"broccoli-merge-trees"</span>; <span class="hljs-comment">// broccoli merge-trees plugin</span>
-<span class="hljs-built_in">module</span>.exports = mergeTrees([<span class="hljs-string">"dir1"</span>, <span class="hljs-string">"dir2"</span>]);
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> () =&gt; mergeTrees([<span class="hljs-string">"dir1"</span>, <span class="hljs-string">"dir2"</span>]);
 </code></pre>
 <p>This is a very simple <code>Brocfile.js</code> that merely merges the contents of <code>dir1</code> and <code>dir2</code> into the output
 directory. The node graph would be represented as follows:</p>
