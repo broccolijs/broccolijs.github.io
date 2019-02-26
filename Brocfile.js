@@ -9,6 +9,7 @@ import funnel from 'broccoli-funnel';
 import assetRev from 'broccoli-asset-rev';
 import LiveReload from 'broccoli-livereload';
 import CleanCss from 'broccoli-clean-css';
+import menu from './menu';
 
 const compileSass = broccoliSass(sass);
 
@@ -21,7 +22,7 @@ export default (options) => {
       title: 'broccoli.build',
       description: 'Broccoli.js - The asset pipeline for ambitious web applications',
       url: 'https://broccoli.build',
-      menu: require('./menu'),
+      menu: menu,
     },
   });
 
