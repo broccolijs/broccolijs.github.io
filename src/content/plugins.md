@@ -1,5 +1,5 @@
 ---
-title: Building Broccoli Plugins
+title: Broccoli Plugins
 ---
 
 The first question you should ask yourself is "what is a Broccoli plugin?".
@@ -16,7 +16,7 @@ Let's have a look at the basic building blocks of a Broccoli plugin.
 # Broccoli-Plugin base class
 
 ```js
-const Plugin = require('broccoli-plugin');
+import Plugin from 'broccoli-plugin';
 
 class MyPlugin extends Plugin
 {
@@ -67,9 +67,9 @@ when the Broccoli process is stopped, all plugins temporary output directories a
 is true, this will not happen and the contents will persist between processes. This allows a plugin which performs
 expensive operations to re-use previously generated content (if its inputs have no changed for example).
 
-`options.needsCache`: If true, a cache directory is created automatically and the path is set at `this.cachePath`. 
-This allows a plugin to store temporary files that may be needed between rebuilds that are not included in the 
-build output.
+`options.needsCache`: Despite the name, `needsCache` doesn't provide caching for the plugin. If true, a directory
+is created for the plugin to store temporary files that may be needed between rebuilds that are not included in the 
+build output. Broccoli sets the path to this directory to `this.cachePath`.  
 
 ## Build
 
@@ -87,7 +87,7 @@ Your plugin must write files to this path, and Broccoli will use this directory 
 plugin. This directory is emptied by Broccoli before each build, unless the `persistentOutput` option is true.
 
 `this.cachePath`: The path on disk to an auxiliary cache directory. Use this to store files that you want preserved
-between builds. This directory will only be deleted when Broccoli exits.
+between rebuilds. This directory will only be deleted when the Broccoli process exits.
 
 All paths stay the same between builds.
 
@@ -96,11 +96,11 @@ All paths stay the same between builds.
 Let's build a sample concatenation plugin. It's going to concatenate a set of files matching a glob expression.
 
 ```js
-const Plugin = require('broccoli-plugin');
-const walkSync = require('walk-sync');
-const fs = require('fs');
+import Plugin from 'broccoli-plugin';
+import walkSync from 'walk-sync';
+import fs from 'fs';
 
-class ConcatPlugin extends Plugin
+export class ConcatPlugin extends Plugin
 {
     constructor(inputNodes, options) {
         super(inputNodes, options);
@@ -128,8 +128,7 @@ class ConcatPlugin extends Plugin
     }
 }
 
-module.exports = function concatPlugin(...params) {
+export default function concatPlugin(...params) {
     return new ConcatPlugin(...params);
 }
-module.exports.Plugin = ConcatPlugin;
 ```
