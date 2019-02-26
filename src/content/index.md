@@ -39,9 +39,12 @@ Broccoli provides a simple, functional javascript API for constructing your buil
 ```js
 /* Brocfile.js */
 
-import compileSass from 'broccoli-sass-source-maps')(require('sass');
+import SassSourceMaps from 'broccoli-sass-source-maps';
+import Sass from 'sass';
 import babel from 'broccoli-babel-transpiler';
 import merge from 'broccoli-merge-trees';
+
+const compileSass = SassSourceMaps(Sass);
 
 const appRoot = 'app';
 
