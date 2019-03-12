@@ -32,7 +32,7 @@ class MyPlugin extends Plugin {
 
 ```
     constructor (inputNode, options) {
-        super([inputNodes], options);
+        super([inputNode], options);
     }
 ```
 
