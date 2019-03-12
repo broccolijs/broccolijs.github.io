@@ -6,7 +6,7 @@ The first question you should ask yourself is "what is a Broccoli plugin?".
 
 Plugins are what a build pipeline developer will interact with most. Plugins are what do the actual work of
 transforming files at each step of build process. The API of a plugin requires just 2 steps, creating a class that
-extends the [broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class, and implementing a 
+extends the [broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class, and implementing a
 `build()` method that performs some work and/or returns a promise.
 
 ${toc}
@@ -19,10 +19,6 @@ Let's have a look at the basic building blocks of a Broccoli plugin.
 import Plugin from 'broccoli-plugin';
 
 class MyPlugin extends Plugin {
-    constructor (inputNode, options) {
-        super([inputNodes], options);
-    }
-    
     build() {
         // A plugin can receive single or multiple inputs nodes/directories
         // The files are available in this.inputPaths[0]/this.inputPaths[1]...
@@ -34,14 +30,19 @@ class MyPlugin extends Plugin {
 
 ## Constructor
 
-`inputNode`: This can be one of two things, a string or another Broccoli plugin. If a string is passed, Broccoli
-expects this to be a source directory and automatically converts this into a
-[broccoli-source](https://github.com/broccolijs/broccoli-source).
+```
+    constructor (inputNode, options) {
+        super([inputNodes], options);
+    }
+```
 
-When constructing your build pipeline you will be passing plugins as inputs to one another, these are commonly
-referred to as `inputNodes`. The `broccoli-plugin` base class expects an array of `inputNodes`, however the 
-majority of plugins will only require a single input, so feel free to pass an array up if only a single input is
-required.
+`inputNode`: This can be one of two things, a string or another Broccoli plugin. Some plugins will require multiple
+`inputNodes` and some only require a single. Think about what your plugin is doing, does it need to operate on multiple
+input directories or a single one. The majority of plugins only require a single directory. The `broccoli-plugin`
+base class requires this argument to be an array however, so always make sure to be passing an array to `super()`.
+
+If a string is passed, Broccoli expects this to be a source directory within the project and automatically converts
+this into a [broccoli-source](https://github.com/broccolijs/broccoli-source) plugin.
 
 `options`: (all optional)
 
@@ -58,37 +59,41 @@ required.
 plugin if this field is not supplied.
 
 `options.annotation`: In addition to the plugin name, Broccoli uses annotations to provide a descriptive label used
-during debugging/printing stack traces. This is not often set by the plugin author, but by the consumer of the 
+during debugging/printing stack traces. This is not often set by the plugin author, but by the consumer of the
 plugin to tell multiple instances of the same plugin apart.
 
-`options.persistentOutput`: If true, the output directory is not automatically emptied between
-(re)builds. By default, a plugin's `outputPath` is emptied before each (re)build ensuring a 
-consistent output state with every build. If `persistentOutput` is set to true, this cleanup
-will not happen and the output directory will persist. This may be useful if your plugin
-implements caching to allow the build method to be skipped. 
+`options.persistentOutput`: By default, Broccoli will provide an empty `outputPath` for the plugin to write files to.
+This applies when running the `serve` command, where the Broccoli process is still running and `build()` is called
+on a plugin again when some input files have changed and a rebuild is triggered.
+
+If this option is true, the output directory is not automatically emptied between rebuilds. This may be useful if your
+plugin implements caching to allow the build method to be skipped. Whenever the Broccoli process exits (after `build`
+or quitting `serve`), all directories are deleted.
 
 `options.needsCache`: Despite the name, `needsCache` doesn't provide caching for the plugin. If true, a directory
-is created for the plugin to store temporary files that may be needed between rebuilds that are not included in the 
-build output. Broccoli sets the path to this directory to `this.cachePath`.  
+is created for the plugin to store temporary files that may be needed between rebuilds that are not included in the
+build output. Broccoli sets the path to this directory to `this.cachePath`.
 
 ## Build
 
-The build method is where the grunt (lol, intentional pun) of the work happens. Build can do anything you can do in
-node. Additionally, if `build()` returns a promise, Broccoli will wait until the promise resolves before continuing
-the rest of the build. Broccoli only builds one plugin at a time in order, from top to bottom of the build graph.
+Build can do anything you can do in node. Additionally, if `build()` returns a promise, Broccoli will wait until the
+promise resolves before continuing the rest of the build. Broccoli only builds one plugin at a time in order, from top
+to bottom of the build graph.
+The build method is where the grunt (lol, intentional pun) of the work happens.
 
-This function will typically access the following only properties:
+This function will typically access the following properties:
 
-`this.inputPaths`: An array of paths on disk corresponding to each node in inputNodes. Your plugin will read 
-files from these paths.
+`this.inputPaths`: An array of paths on disk corresponding to each node in inputNodes. Your plugin will read
+files from these paths. These paths are auto-generated by Broccoli and will typically be the output path of that a
+previous plugin has written to.
 
-`this.outputPath`: Broccoli will automatically create a directory for this plugin to write to when it starts up. 
-Your plugin must write files to this path, and Broccoli will use this directory as an `inputPath` to the next 
+`this.outputPath`: Broccoli will automatically create a directory for this plugin to write to when it starts up.
+Your plugin must write files to this path, and Broccoli will use this directory as an `inputPath` to the next
 plugin. This directory is emptied by Broccoli before each build, unless the `persistentOutput` option is true.
 
-`this.cachePath`: The path on disk to an auxiliary cache directory. Use this to store files that 
+`this.cachePath`: The path on disk to an auxiliary cache directory. Use this to store files that
 you want preserved between builds but do not end up in your outputPath. This path is only set
-when the `needsCache` option is true, and the directory will only be deleted when the Broccoli 
+when the `needsCache` option is true, and the directory will only be deleted when the Broccoli
 process exits.
 
 All paths stay the same between rebuilds.
@@ -105,12 +110,12 @@ import fs from 'fs';
 export class ConcatPlugin extends Plugin {
     constructor(inputNodes, options) {
         super(inputNodes, options);
-        
+
         this.fileMatchers = options.globs || ['**/*'];
-        this.joinSeparator = options.joinSeparator || "\n";
+        this.joinSeparator = options.joinSeparator === undefined || "\n";
         this.outputFile = options.outputFile || 'concat';
     }
-    
+
     build() {
         const walkOptions = {
             includeBasePath: true,
@@ -134,11 +139,11 @@ export default function concatPlugin(...params) {
 }
 ```
 
-Let's take a look and see what's happening here. 
+Let's take a look and see what's happening here.
 
 First, we are importing our dependencies. We are using 3 packages, the
-[broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class that we are extending, a package 
-called [walk-sync](https://www.npmjs.com/package/walk-sync) which synchronously walks a directory recursively, 
+[broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class that we are extending, a package
+called [walk-sync](https://www.npmjs.com/package/walk-sync) which synchronously walks a directory recursively,
 and the Node [fs](https://nodejs.org/api/fs.html) package.
 
 After this we define the class and the constructor:
@@ -146,7 +151,7 @@ After this we define the class and the constructor:
 export class ConcatPlugin extends Plugin {
     constructor(inputNodes, options) {
         super(inputNodes, options);
-        
+
         this.fileMatchers = options.globs || ['**/*'];
         this.joinSeparator = options.joinSeparator || "\n";
         this.outputFile = options.outputFile || 'concat';
@@ -160,13 +165,13 @@ import { ConcatPlugin } from 'concat-plugin';
 class MyPlugin extends ConcatPlugin {
 ```
 
-The constructor accepts multiple inputNodes and an options hash. As you can see we are defining 3 options, a 
+The constructor accepts multiple inputNodes and an options hash. As you can see we are defining 3 options, a
 default glob expression, the join character and the output file name. These will be used to inform how our build
-method should work. 
+method should work.
 
-Next up we define our `build()` method. First we setup some options for the walk-sync package then we iterate 
+Next up we define our `build()` method. First we setup some options for the walk-sync package then we iterate
 `this.inputPaths` using a reduce function. If you've not used reduce before, it provides a simple functional
-programming way of iterating an input and combining the output into an accumulator. In our case we are merely 
+programming way of iterating an input and combining the output into an accumulator. In our case we are merely
 concatenating the output together into one big string.
 
 ```js
@@ -176,24 +181,24 @@ concatenating the output together into one big string.
             directories: false,
             globs: this.fileMatchers,
         };
-        
+
         const content = this.inputPaths
             .reduce((output, inputPath) => output + this.joinSeparator +
                 walkSync(inputPath, walkOptions)
                     .map(file => fs.readFileSync(file, { encoding: 'UTF-8' }))
                     .join(this.joinSeparator),
             '');
-    
+
         fs.writeFileSync(`${this.outputPath}/${this.outputFile}`, content);
     }
 ```
 
-Next we iterate each file the `inputPath` and read its contents. We do this via the map function, which 
+Next we iterate each file in the `inputPath` and read its contents. We do this via the map function, which
 transforms the array of files into an array of the contents of each file. We then join all the files together
-with the separator character, which is returned as the result to the reduce method above. 
+with the separator character, which is returned as the result to the reduce method above.
 
-After the above is complete, we now have all of the file contents within the `content` variable and all that is 
-left is to write that to the outputFile. 
+After the above is complete, we now have all of the file contents within the `content` variable and all that is
+left is to write that to the outputFile.
 
 That's it, plugin complete. In our case, the plugin is entirely synchronous and as such just returns at the end.
 If we needed the plugin to be asynchronous, we could alternatively return a promise and Broccoli would wait until
@@ -215,13 +220,13 @@ import concat from 'concat-plugin';
 export default () => concat(['dir1', 'dir2']);
 ```
 
-As you can see, there isn't really any magic happening here, it's all standard Node code, just wrapped in a 
+As you can see, there isn't really any magic happening here, it's all standard Node code, just wrapped in a
 `build()` method that is provided an array of `inputPaths` and an `outputPath` to write to.
 
 # Caching
 
-Adding caching to a plugin is relatively straight forward. Caching allows a plugin to skip its `build()` method
-if it doesn't need to do anything because its inputs have no changed. We can use a couple of node packages to
+Adding caching to a plugin is relatively straightforward. Caching allows a plugin to skip its `build()` method
+if it doesn't need to do anything because its inputs have not changed. We can use a couple of node packages to
 achieve this. [fs-tree-diff](https://www.npmjs.com/package/fs-tree-diff) is used to calculate a diff between the
 2 states of a directory, and [walk-sync](https://www.npmjs.com/package/walk-sync) which synchronously walks all
 the files in a directory and produces a list, which is passed to `fs-tree-diff`.
@@ -273,9 +278,10 @@ export default function cacher(...params) {
 ```
 
 Let's examine the above. First off we're importing the packages, nothing exciting there.
-In the `constructor()` we're setting `persistentOutput: true` in the options hash to true, this ensures that 
-Broccoli does not delete the output directory before calling `build()`, we need this so our output is preserved 
-and we can reuse it.
+In the `constructor()` we're setting `persistentOutput` in the options hash to true, this ensures that Broccoli does
+not delete the output directory before calling `build()`, we need this so our output is preserved between rebuilds
+and we can reuse it. Note that when the Broccoli process exits (after build or quitting serve), all directories are
+deleted, nothing is preserved between builds.
 
 ```js
   constructor (inputNodes, options) {
@@ -288,7 +294,7 @@ and we can reuse it.
   }
 ```
 
-Next, we've added a `_hasChanged()` method that does our cache state checking. 
+Next, we've added a `_hasChanged()` method that does our cache state checking.
 
 ```js
   _hasChanged() {
@@ -307,8 +313,8 @@ Next, we've added a `_hasChanged()` method that does our cache state checking.
   }
 ```
 
-Here, we're iterating each of `this.inputPaths` and using `FSTree.fromEntries()` and `walkSync.entries()` together 
-to produce a `current` state, then calculating a patch which tells us about added/removed/changed files using 
+Here, we're iterating each of `this.inputPaths` and using `FSTree.fromEntries()` and `walkSync.entries()` together
+to produce a `current` state, then calculating a patch which tells us about added/removed/changed files using
 `calculatePatch()`, and setting `changed` if there are any changes, then returning the `changed` result.
 
 ```js
