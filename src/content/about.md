@@ -17,7 +17,7 @@ Sass for your CSS, etc.
 
 Broccoli.js is different from other build tools. You may be used to tools like [Grunt](https://gruntjs.com/) (a 
 task runner), [Gulp](https://gulpjs.com/) (streams and pipes) or [Webpack](https://webpack.js.org/) (a module 
-bundler), these all aim to solve different problems than what Broccoli what built for.
+bundler), these all aim to solve different problems than what Broccoli was built for.
 
 Broccoli provides a modular plugin API to leverage other Node tools. Tools like [Babel](https://babeljs.io/),
 [Rollup](https://rollupjs.org/), [Node-Sass](https://github.com/sass/node-sass), 
@@ -77,7 +77,7 @@ The above is all well and good, but notice how we have to handle the state betwe
 this scales as our build pipeline grows, adding in Sass compilation, JavaScript transpilation (Babel),
 fingerprinting, etc. That's lots of temp directories and file state that you have to handle.
 
-Broccoli works by managing of a set of directories, connected together by plugins, which describe how files
+Broccoli works by managing a set of directories, connected together by plugins, which describe how files
 are moved or transformed at each step of the build process. Broccoli ensures plugins are called in the prescribed
 order, and writes the result to a `target` directory. Each plugin is responsible for processing files passed to
 it in input directories, and writing files to its output directory. This allows you to focus on the
@@ -95,7 +95,7 @@ app                                                       [target]
 ```
 
 Broccoli itself doesn't really care about files, it simply takes source directories and passes them as inputs to
-plugins, creates an output directory for the plugin to write to, and passes that output directory it as an input
+plugins, creates an output directory for the plugin to write to, and passes that output directory as an input
 to the next plugin.
 
 Broccoli is configured with a file in the root of your project called `Brocfile.js`. This file defines the build
@@ -151,7 +151,7 @@ that contains an `env` property to indicate the environment. This is set from th
 defaults to `development`.
 
 This should all be fairly familiar to you if you've ever written JavaScript (or any programming language for that
-matter) before, it's just inputs and output.
+matter) before; it's just inputs and output.
 
 Note: [ES Modules](https://nodejs.org/api/esm.html) syntax is supported by Broccoli in the current master. Prior
 to this, standard CommonJs syntax with `require` and `module.exports` should be used.
@@ -159,7 +159,7 @@ to this, standard CommonJs syntax with `require` and `module.exports` should be 
 ### Plugins
 
 Plugins are what a build pipeline developer will interact with most. Plugins are what do the actual work of
-transforming files at each step of build process. The API of a plugin is pretty simple, all that's required is
+transforming files at each step of the build process. The API of a plugin is pretty simple, all that's required is
 creating a class that extends the [broccoli-plugin](https://github.com/broccolijs/broccoli-plugin) base class, and
 implementing a `build()` method, that performs some work or returns a promise.
 
@@ -196,7 +196,7 @@ changes in this directory will not trigger a rebuild.
 
 ### Trees
 
-The build pipeline is series of connected plugins, from one or more input directories to a single target directory.
+The build pipeline is a series of connected plugins, from one or more input directories to a single target directory.
 Working from the target directory (the final output) back up to the source directories resembles a tree. Think of a
 piece of Broccoli and you should have a mental model of what a build pipeline looks like.
 
@@ -258,10 +258,10 @@ contents of `dir1` and `dir2` when the `build` command is run.
 
 ## Serving
 
-One last thing. Broccoli comes with a built in development server, that provides an HTTP server to host your assets
+One last thing. Broccoli comes with a built in development server that provides an HTTP server to host your assets
 in development, and perform rebuilds when source directories (nodes) change.
 
 The local HTTP server runs on `http://localhost:4200`
 
-Ok, that pretty much wraps up the basics, let's continue on an learn how to setup a Broccoli build pipeline in the
+Ok, that pretty much wraps up the basics, let's continue on and learn how to setup a Broccoli build pipeline in the
 [Getting Started](/getting-started.html) guide.
