@@ -39,7 +39,7 @@ class MyPlugin extends Plugin {
 `inputNode`: This can be one of two things, a string or another Broccoli plugin. Some plugins will require multiple
 `inputNodes` and some only require a single. Think about what your plugin is doing, does it need to operate on multiple
 input directories or a single one. The majority of plugins only require a single directory. The `broccoli-plugin`
-base class requires this argument to be an array however, so always make sure to be passing an array to `super()`.
+base class requires this argument to be an array however, so always make sure pass an array to `super()`.
 
 If a string is passed, Broccoli expects this to be a source directory within the project and automatically converts
 this into a [broccoli-source](https://github.com/broccolijs/broccoli-source) plugin.
