@@ -299,15 +299,15 @@ deleted, nothing is preserved between builds.
 Next, we've added a `_hasChanged()` method that does our cache state checking.
 
 ```js
-  _hasChanged() {
-    let changed = false;
+  getChanges() {
+    let changes = [];
     for (let i in this.inputPaths) {
       const current = FSTree.fromEntries(walkSync.entries(this.inputPaths[i]));
       const patch = current.calculatePatch(this._previous[i] || []);
       this._previous[i] = current;
 
       if (patch.length) {
-        changed = true;
+        changes = changes.concat(patch);
       }
     }
 
@@ -321,11 +321,12 @@ to produce a `current` state, then calculating a patch which tells us about adde
 
 ```js
   build() {
-    if (!this._hasChanged()) {
+    const changes = this.getChanges();
+    if (!changes.length) {
       return;
     }
 
-    // do work
+    // do work, iterate changes for added/changed/deleted files
   }
 ```
 
