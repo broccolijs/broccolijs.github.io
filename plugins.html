@@ -1,0 +1,335 @@
+<html>
+
+<head>
+    <title>Broccoli Plugins | broccoli.build</title>
+    <meta name="description" content="Broccoli.js - The asset pipeline for ambitious web applications">
+    <link media="all" rel="stylesheet" href="/assets/site-c0a21236dc584428bc9940ca558900ac.css" />
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon-46d49475781a4e8ffacd9d757b2b2af3.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32-73910b61c8ca8f3b038c58161a86322d.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16-5a05f8998791ee6ee2471d3871e8de03.png">
+    <link rel="manifest" href="/assets/favicon/site-b9aa277fcfc34c31db6c7a7ea3469b8c.webmanifest">
+    <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab-8c270b1f8fb035bee9be6c5c779a557a.svg" color="#628336">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta property="og:title" content="Broccoli Plugins | broccoli.build" />
+    <meta property="og:description" content="Broccoli.js - The asset pipeline for ambitious web applications" />
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content="2019-03-16T23:3:43+00:00" />
+    <meta property="og:url" content="https://broccoli.build/plugins.html" />
+    <meta property="og:image" content="https://broccoli.build/assets/logo/logo-large-4b34a6c5a21fbbd16639b21ec2e78902.png" />
+</head>
+
+
+<body>
+    <nav>
+    <ul>
+        <li class="logo">
+            <a href="/">
+                <img src="/assets/logo/logo-white-tiny-597cc3282531427cc7f2bc07c94fd7c2.png"
+                     srcset="/assets/logo/logo-white-tiny-597cc3282531427cc7f2bc07c94fd7c2.png 1x, /assets/logo/logo-white-tiny@2x-19e2e2d9fb38390a29d726fb422e792d.png 2x"
+                     width="25px"
+                />
+            </a>
+        </li>
+            <li><a href="/" title="Home">Home</a></li>
+            <li><a href="/about.html" title="About">About</a></li>
+            <li><a href="/getting-started.html" title="Getting Started">Getting Started</a></li>
+            <li><a href="/plugins.html" title="Plugins">Plugins</a></li>
+    </ul>
+</nav>
+
+
+    <section class="content">
+        <h1 class="heading">Broccoli Plugins</h1>
+        <div><p>The first question you should ask yourself is “what is a Broccoli plugin?”.</p>
+<p>Plugins are what a build pipeline developer will interact with most. Plugins are what do the actual work of
+transforming files at each step of build process. The API of a plugin requires just 2 steps, creating a class that
+extends the <a href="https://github.com/broccolijs/broccoli-plugin">broccoli-plugin</a> base class, and implementing a
+<code>build()</code> method that performs some work and/or returns a promise.</p>
+<nav class="table-of-contents"><ol><li><a href="#broccoli-plugin-base-class">Broccoli-Plugin base class </a><ol><li><a href="#constructor">Constructor </a></li><li><a href="#build">Build </a></li></ol></li><li><a href="#example-plugin">Example plugin </a></li><li><a href="#caching">Caching </a></li></ol></nav><p>Let’s have a look at the basic building blocks of a Broccoli plugin.</p>
+<h1 id="broccoli-plugin-base-class">Broccoli-Plugin base class <a class="header-anchor" href="#broccoli-plugin-base-class" aria-hidden="true">⚭</a></h1>
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> Plugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'broccoli-plugin'</span>);
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyPlugin</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Plugin</span> </span>{
+    build() {
+        <span class="hljs-comment">// A plugin can receive single or multiple inputs nodes/directories</span>
+        <span class="hljs-comment">// The files are available in this.inputPaths[0]/this.inputPaths[1]...</span>
+        <span class="hljs-comment">// You can do anything with these files that you can do in node</span>
+        <span class="hljs-comment">// The output of your plugin must write to this.outputPath</span>
+    }
+}
+</code></pre>
+<p>Now you may be asking yourself why we are using the CommonJS module syntax here and not ESM like we do in the
+Brocfile.js. The reason for this is because ESM syntax is only supported from Broccoli 2.1.0 and is not currently
+supported in <a href="https://ember-cli.com/">Ember-CLI</a> which uses Broccoli.js for its build system, so the
+recommendation is to use CommonJS for now.</p>
+<h2 id="constructor">Constructor <a class="header-anchor" href="#constructor" aria-hidden="true">⚭</a></h2>
+<pre><code class="hljs language-js">    <span class="hljs-keyword">constructor</span> (inputNode, options) {
+        <span class="hljs-keyword">super</span>([inputNode], options);
+    }
+</code></pre>
+<p><code>inputNode</code>: This can be one of two things, a string or another Broccoli plugin. Some plugins will require multiple
+<code>inputNodes</code> and some only require a single. Think about what your plugin is doing, does it need to operate on multiple
+input directories or a single one. The majority of plugins only require a single directory. The <code>broccoli-plugin</code>
+base class requires this argument to be an array however, so always make sure pass an array to <code>super()</code>.</p>
+<p>If a string is passed, Broccoli expects this to be a source directory within the project and automatically converts
+this into a <a href="https://github.com/broccolijs/broccoli-source">broccoli-source</a> plugin.</p>
+<p><code>options</code>: (all optional)</p>
+<pre><code class="hljs language-js">{
+    <span class="hljs-attr">name</span>: <span class="hljs-string">''</span>,
+    <span class="hljs-attr">annotation</span>: <span class="hljs-string">''</span>,
+    <span class="hljs-attr">persistentOutput</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">needsCache</span>: <span class="hljs-literal">false</span>,
+}
+</code></pre>
+<p><code>options.name</code>: Custom name used when debugging/printing stack traces. Broccoli will use the name of your
+plugin if this field is not supplied.</p>
+<p><code>options.annotation</code>: In addition to the plugin name, Broccoli uses annotations to provide a descriptive label used
+during debugging/printing stack traces. This is not often set by the plugin author, but by the consumer of the
+plugin to tell multiple instances of the same plugin apart.</p>
+<p><code>options.persistentOutput</code>: By default, Broccoli will provide an empty <code>outputPath</code> for the plugin to write files to.
+This applies when running the <code>serve</code> command, where the Broccoli process is still running and <code>build()</code> is called
+on a plugin again when some input files have changed and a rebuild is triggered.</p>
+<p>If this option is true, the output directory is not automatically emptied between rebuilds. This may be useful if your
+plugin implements caching to allow the build method to be skipped. Whenever the Broccoli process exits (after <code>build</code>
+or quitting <code>serve</code>), all directories are deleted.</p>
+<p><code>options.needsCache</code>: Despite the name, <code>needsCache</code> doesn’t provide caching for the plugin. If true, a directory
+is created for the plugin to store temporary files that may be needed between rebuilds that are not included in the
+build output. Broccoli sets the path to this directory to <code>this.cachePath</code>.</p>
+<h2 id="build">Build <a class="header-anchor" href="#build" aria-hidden="true">⚭</a></h2>
+<p>Build can do anything you can do in node. Additionally, if <code>build()</code> returns a promise, Broccoli will wait until the
+promise resolves before continuing the rest of the build. Broccoli only builds one plugin at a time in order, from top
+to bottom of the build graph. The build method is where the grunt (lol, intentional pun) of the work happens.</p>
+<p>This function will typically access the following properties:</p>
+<p><code>this.inputPaths</code>: An array of paths on disk corresponding to each node in inputNodes. Your plugin will read
+files from these paths. These paths are auto-generated by Broccoli and will typically be the output path of that a
+previous plugin has written to. <code>this.inputPaths</code> remains consistent between rebuilds.</p>
+<p><code>this.outputPath</code>: Broccoli will automatically create a directory for this plugin to write to when it starts up.
+Your plugin must write files to this path, and Broccoli will use this directory as an <code>inputPath</code> to the next
+plugin. This directory is emptied by Broccoli before each build, unless the <code>persistentOutput</code> option is true.
+<code>this.outputPath</code> remains consistent between rebuilds.</p>
+<p><code>this.cachePath</code>: The path on disk to an auxiliary cache directory. Use this to store files that
+you want preserved between builds but do not end up in your outputPath. This path is only set
+when the <code>needsCache</code> option is true, and the directory will only be deleted when the Broccoli
+process exits.</p>
+<p>Note: all paths are setup by Broccoli when the process starts, before <code>build()</code> is called for the first time, and
+stay consistent between rebuilds during <code>serve</code>, you can rely on these paths not changing between <code>plugin.build()</code>
+being called by Broccoli as changes to source files are detected during <code>serve</code>.</p>
+<h1 id="example-plugin">Example plugin <a class="header-anchor" href="#example-plugin" aria-hidden="true">⚭</a></h1>
+<p>Let’s build a sample concatenation plugin. It’s going to concatenate a set of files matching a glob expression.</p>
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> Plugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'broccoli-plugin'</span>);
+<span class="hljs-keyword">const</span> walkSync = <span class="hljs-built_in">require</span>(<span class="hljs-string">'walk-sync'</span>);
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ConcatPlugin</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Plugin</span> </span>{
+    <span class="hljs-keyword">constructor</span>(inputNodes, options) {
+        <span class="hljs-keyword">super</span>(inputNodes, options);
+
+        <span class="hljs-keyword">this</span>.fileMatchers = options.globs || [<span class="hljs-string">'**/*'</span>];
+        <span class="hljs-keyword">this</span>.joinSeparator = options.joinSeparator === <span class="hljs-literal">undefined</span> || <span class="hljs-string">"\n"</span>;
+        <span class="hljs-keyword">this</span>.outputFile = options.outputFile || <span class="hljs-string">'concat'</span>;
+    }
+
+    build() {
+        <span class="hljs-keyword">const</span> walkOptions = {
+            <span class="hljs-attr">includeBasePath</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">directories</span>: <span class="hljs-literal">false</span>,
+            <span class="hljs-attr">globs</span>: <span class="hljs-keyword">this</span>.fileMatchers,
+        };
+
+        <span class="hljs-keyword">const</span> content = <span class="hljs-keyword">this</span>.inputPaths
+            .reduce(<span class="hljs-function">(<span class="hljs-params">output, inputPath</span>) =&gt;</span> output + <span class="hljs-keyword">this</span>.joinSeparator +
+                walkSync(inputPath, walkOptions)
+                    .map(<span class="hljs-function"><span class="hljs-params">file</span> =&gt;</span> fs.readFileSync(file, { <span class="hljs-attr">encoding</span>: <span class="hljs-string">'UTF-8'</span> }))
+                    .join(<span class="hljs-keyword">this</span>.joinSeparator),
+            <span class="hljs-string">''</span>);
+
+        fs.writeFileSync(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-keyword">this</span>.outputPath}</span>/<span class="hljs-subst">${<span class="hljs-keyword">this</span>.outputFile}</span>`</span>, content);
+    }
+}
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatPlugin</span>(<span class="hljs-params">...params</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ConcatPlugin(...params);
+}
+
+<span class="hljs-built_in">module</span>.exports.ConcatPlugin = ConcatPlugin;
+</code></pre>
+<p>Let’s take a look and see what’s happening here.</p>
+<p>First, we are importing our dependencies. We are using 3 packages, the
+<a href="https://github.com/broccolijs/broccoli-plugin">broccoli-plugin</a> base class that we are extending, a package
+called <a href="https://www.npmjs.com/package/walk-sync">walk-sync</a> which synchronously walks a directory recursively,
+and the Node <a href="https://nodejs.org/api/fs.html">fs</a> package.</p>
+<p>After this we define the class:</p>
+<pre><code class="hljs language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ConcatPlugin</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Plugin</span> </span>{
+    <span class="hljs-keyword">constructor</span>(inputNodes, options) {
+        <span class="hljs-keyword">super</span>(inputNodes, options);
+
+        <span class="hljs-keyword">this</span>.fileMatchers = options.globs || [<span class="hljs-string">'**/*'</span>];
+        <span class="hljs-keyword">this</span>.joinSeparator = options.joinSeparator || <span class="hljs-string">"\n"</span>;
+        <span class="hljs-keyword">this</span>.outputFile = options.outputFile || <span class="hljs-string">'concat'</span>;
+    }
+}
+</code></pre>
+<p>The constructor accepts multiple inputNodes and an options hash. As you can see we are defining 3 options, a
+default glob expression, the join character and the output file name. These will be used to inform how our build
+method should work.</p>
+<p>Next up we define our <code>build()</code> method. First we setup some options for the walk-sync package then we iterate
+<code>this.inputPaths</code> using a reduce function. If you’ve not used reduce before, it provides a simple functional
+programming way of iterating an input and combining the output into an accumulator. In our case we are merely
+concatenating the output together into one big string.</p>
+<pre><code class="hljs language-js">    build() {
+        <span class="hljs-keyword">const</span> walkOptions = {
+            <span class="hljs-attr">includeBasePath</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">directories</span>: <span class="hljs-literal">false</span>,
+            <span class="hljs-attr">globs</span>: <span class="hljs-keyword">this</span>.fileMatchers,
+        };
+
+        <span class="hljs-keyword">const</span> content = <span class="hljs-keyword">this</span>.inputPaths
+            .reduce(<span class="hljs-function">(<span class="hljs-params">output, inputPath</span>) =&gt;</span> output + <span class="hljs-keyword">this</span>.joinSeparator +
+                walkSync(inputPath, walkOptions)
+                    .map(<span class="hljs-function"><span class="hljs-params">file</span> =&gt;</span> fs.readFileSync(file, { <span class="hljs-attr">encoding</span>: <span class="hljs-string">'UTF-8'</span> }))
+                    .join(<span class="hljs-keyword">this</span>.joinSeparator),
+            <span class="hljs-string">''</span>);
+
+        fs.writeFileSync(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-keyword">this</span>.outputPath}</span>/<span class="hljs-subst">${<span class="hljs-keyword">this</span>.outputFile}</span>`</span>, content);
+    }
+</code></pre>
+<p>Next we iterate each file in the <code>inputPath</code> and read its contents. We do this via the map function, which
+transforms the array of files into an array of the contents of each file. We then join all the files together
+with the separator character, which is returned as the result to the reduce method above.</p>
+<p>After the above is complete, we now have all of the file contents within the <code>content</code> variable and all that is
+left is to write that to the outputFile.</p>
+<p>That’s it, plugin complete. In our case, the plugin is entirely synchronous and as such just returns at the end.
+If we needed the plugin to be asynchronous, we could alternatively return a promise and Broccoli would wait until
+the promise resolved before continuing the build.</p>
+<p>Lastly, we export a default function that will be used when this plugin is imported into a build pipeline,
+and export the class as a named property at the bottom so that other plugin developers can extend it. The name of
+the class export should match the class, as this is how an ESM export would look so ensures best forward
+compatibility for the future.</p>
+<pre><code class="hljs language-js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatPlugin</span>(<span class="hljs-params">...params</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ConcatPlugin(...params);
+}
+
+<span class="hljs-built_in">module</span>.exports.ConcatPlugin = ConcatPlugin;
+</code></pre>
+<p>E.g.</p>
+<pre><code class="hljs language-js"><span class="hljs-comment">// Brocfile.js</span>
+<span class="hljs-keyword">const</span> concat = <span class="hljs-built_in">require</span>(<span class="hljs-string">'concat-plugin'</span>);
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> () =&gt; concat([<span class="hljs-string">'dir1'</span>, <span class="hljs-string">'dir2'</span>]);
+</code></pre>
+<p>And the class can be imported as follows by another plugin developer:</p>
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> { ConcatPlugin } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'concat-plugin'</span>);
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyPlugin</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ConcatPlugin</span> </span>{
+</code></pre>
+<p>As you can see, there isn’t really any magic happening here, it’s all standard Node code, just wrapped in a
+<code>build()</code> method that is provided an array of <code>inputPaths</code> and an <code>outputPath</code> to write to.</p>
+<h1 id="caching">Caching <a class="header-anchor" href="#caching" aria-hidden="true">⚭</a></h1>
+<p>Adding caching to a plugin is relatively straightforward. Caching allows a plugin to skip its <code>build()</code> method
+if it doesn’t need to do anything because its inputs have not changed. We can use a couple of node packages to
+achieve this. <a href="https://www.npmjs.com/package/fs-tree-diff">fs-tree-diff</a> is used to calculate a diff between the
+2 states of a directory, and <a href="https://www.npmjs.com/package/walk-sync">walk-sync</a> which synchronously walks all
+the files in a directory and produces a list, which is passed to <code>fs-tree-diff</code>.</p>
+<p>Let’s take a look:</p>
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> Plugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'broccoli-plugin'</span>);
+<span class="hljs-keyword">const</span> FSTree = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs-tree-diff'</span>);
+<span class="hljs-keyword">const</span> walkSync = <span class="hljs-built_in">require</span>(<span class="hljs-string">'walk-sync'</span>);
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Cacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Plugin</span> </span>{
+  <span class="hljs-keyword">constructor</span> (inputNodes, options) {
+    <span class="hljs-keyword">super</span>(inputNodes, {
+      ...options,
+      <span class="hljs-attr">persistentOutput</span>: <span class="hljs-literal">true</span>,
+    });
+
+    <span class="hljs-keyword">this</span>._previous = [];
+  }
+
+  _hasChanged() {
+    <span class="hljs-keyword">let</span> changed = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> inputPath <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.inputPaths) {
+      <span class="hljs-keyword">const</span> current = FSTree.fromEntries(walkSync.entries(inputPath));
+      <span class="hljs-keyword">const</span> patch = current.calculatePatch(<span class="hljs-keyword">this</span>._previous[inputPath] || []);
+      <span class="hljs-keyword">this</span>._previous[inputPath] = current;
+
+      <span class="hljs-keyword">if</span> (patch.length) {
+        changed = <span class="hljs-literal">true</span>;
+      }
+    }
+
+    <span class="hljs-keyword">return</span> changed;
+  }
+
+  build() {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>._hasChanged()) {
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-comment">// do work</span>
+  }
+}
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cacher</span>(<span class="hljs-params">...params</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Cacher(...params);
+}
+
+<span class="hljs-built_in">module</span>.exports.Cacher = Cacher;
+</code></pre>
+<p>Let’s examine the above. First off we’re importing the packages, nothing exciting there.
+In the <code>constructor()</code> we’re setting <code>persistentOutput</code> in the options hash to true, this ensures that Broccoli does
+not delete the output directory before calling <code>build()</code>, we need this so our output is preserved between rebuilds
+and we can reuse it. Note that when the Broccoli process exits (after build or quitting serve), all directories are
+deleted, nothing is preserved between builds.</p>
+<pre><code class="hljs language-js">  <span class="hljs-keyword">constructor</span> (inputNodes, options) {
+    <span class="hljs-keyword">super</span>(inputNodes, {
+      ...options,
+      <span class="hljs-attr">persistentOutput</span>: <span class="hljs-literal">true</span>,
+    });
+
+    <span class="hljs-keyword">this</span>._previous = [];
+  }
+</code></pre>
+<p>Next, we’ve added a <code>_hasChanged()</code> method that does our cache state checking.</p>
+<pre><code class="hljs language-js">  getChanges() {
+    <span class="hljs-keyword">let</span> changes = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>.inputPaths) {
+      <span class="hljs-keyword">const</span> current = FSTree.fromEntries(walkSync.entries(<span class="hljs-keyword">this</span>.inputPaths[i]));
+      <span class="hljs-keyword">const</span> patch = current.calculatePatch(<span class="hljs-keyword">this</span>._previous[i] || []);
+      <span class="hljs-keyword">this</span>._previous[i] = current;
+
+      <span class="hljs-keyword">if</span> (patch.length) {
+        changes = changes.concat(patch);
+      }
+    }
+
+    <span class="hljs-keyword">return</span> changed;
+  }
+</code></pre>
+<p>Here, we’re iterating each of <code>this.inputPaths</code> and using <code>FSTree.fromEntries()</code> and <code>walkSync.entries()</code> together
+to produce a <code>current</code> state, then calculating a patch which tells us about added/removed/changed files using
+<code>calculatePatch()</code>, and setting <code>changed</code> if there are any changes, then returning the <code>changed</code> result.</p>
+<pre><code class="hljs language-js">  build() {
+    <span class="hljs-keyword">const</span> changes = <span class="hljs-keyword">this</span>.getChanges();
+    <span class="hljs-keyword">if</span> (!changes.length) {
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-comment">// do work, iterate changes for added/changed/deleted files</span>
+  }
+</code></pre>
+<p>Then in the <code>build()</code> method we simply call <code>this._hasChanged()</code> and if nothing has changed, we skip doing any
+further work. That’s it, our plugin will now skip doing any work if none of the input files have changed.</p>
+</div>
+    </section>
+
+    <footer>
+    Found an error/typo on this page? <a href="https://github.com/broccolijs/broccolijs.github.io/edit/code/src/content/plugins.md">Why not propose a fix?</a>
+</footer>
+
+</body>
+
+</html>
