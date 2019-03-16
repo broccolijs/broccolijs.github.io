@@ -16,7 +16,7 @@ Let's have a look at the basic building blocks of a Broccoli plugin.
 # Broccoli-Plugin base class
 
 ```js
-import Plugin from 'broccoli-plugin';
+const Plugin = require('broccoli-plugin');
 
 class MyPlugin extends Plugin {
     build() {
@@ -28,9 +28,14 @@ class MyPlugin extends Plugin {
 }
 ```
 
+Now you may be asking yourself why we are using the CommonJS module syntax here and not ESM like we do in the
+Brocfile.js. The reason for this is because ESM syntax is only supported from Broccoli 2.1.0 and is not currently
+supported in [Ember-CLI](https://ember-cli.com/) which uses Broccoli.js for its build system, so the 
+recommendation is to use CommonJS for now.
+
 ## Constructor
 
-```
+```js
     constructor (inputNode, options) {
         super([inputNode], options);
     }
@@ -105,11 +110,11 @@ being called by Broccoli as changes to source files are detected during `serve`.
 Let's build a sample concatenation plugin. It's going to concatenate a set of files matching a glob expression.
 
 ```js
-import Plugin from 'broccoli-plugin';
-import walkSync from 'walk-sync';
-import fs from 'fs';
+const Plugin = require('broccoli-plugin');
+const walkSync = require('walk-sync');
+const fs = require('fs');
 
-export class ConcatPlugin extends Plugin {
+class ConcatPlugin extends Plugin {
     constructor(inputNodes, options) {
         super(inputNodes, options);
 
@@ -136,9 +141,11 @@ export class ConcatPlugin extends Plugin {
     }
 }
 
-export default function concatPlugin(...params) {
+module.exports = function concatPlugin(...params) {
     return new ConcatPlugin(...params);
 }
+
+module.exports.ConcatPlugin = ConcatPlugin;
 ```
 
 Let's take a look and see what's happening here.
@@ -148,9 +155,9 @@ First, we are importing our dependencies. We are using 3 packages, the
 called [walk-sync](https://www.npmjs.com/package/walk-sync) which synchronously walks a directory recursively,
 and the Node [fs](https://nodejs.org/api/fs.html) package.
 
-After this we define the class and the constructor:
+After this we define the class:
 ```js
-export class ConcatPlugin extends Plugin {
+class ConcatPlugin extends Plugin {
     constructor(inputNodes, options) {
         super(inputNodes, options);
 
@@ -158,13 +165,7 @@ export class ConcatPlugin extends Plugin {
         this.joinSeparator = options.joinSeparator || "\n";
         this.outputFile = options.outputFile || 'concat';
     }
-```
-
-Here we are defining our class and exporting it so that other plugins can extend it by doing:
-```js
-import { ConcatPlugin } from 'concat-plugin';
-
-class MyPlugin extends ConcatPlugin {
+}
 ```
 
 The constructor accepts multiple inputNodes and an options hash. As you can see we are defining 3 options, a
@@ -206,20 +207,33 @@ That's it, plugin complete. In our case, the plugin is entirely synchronous and 
 If we needed the plugin to be asynchronous, we could alternatively return a promise and Broccoli would wait until
 the promise resolved before continuing the build.
 
-Lastly, we export a default function that will be used when this plugin is imported into a build pipeline
+Lastly, we export a default function that will be used when this plugin is imported into a build pipeline,
+and export the class as a named property at the bottom so that other plugin developers can extend it. The name of
+the class export should match the class, as this is how an ESM export would look so ensures best forward 
+compatibility for the future.
+
 ```js
-export default function concatPlugin(...params) {
+module.exports = function concatPlugin(...params) {
     return new ConcatPlugin(...params);
 }
+
+module.exports.ConcatPlugin = ConcatPlugin;
 ```
 
 E.g.
 
 ```js
 // Brocfile.js
-import concat from 'concat-plugin';
+const concat = require('concat-plugin');
 
 export default () => concat(['dir1', 'dir2']);
+```
+
+And the class can be imported as follows by another plugin developer:
+```js
+const { ConcatPlugin } = require('concat-plugin');
+
+class MyPlugin extends ConcatPlugin {
 ```
 
 As you can see, there isn't really any magic happening here, it's all standard Node code, just wrapped in a
@@ -236,11 +250,11 @@ the files in a directory and produces a list, which is passed to `fs-tree-diff`.
 Let's take a look:
 
 ```js
-import Plugin from 'broccoli-plugin';
-import FSTree from 'fs-tree-diff';
-import walkSync from 'walk-sync';
+const Plugin = require('broccoli-plugin');
+const FSTree = require('fs-tree-diff');
+const walkSync = require('walk-sync');
 
-export class Cacher extends Plugin {
+class Cacher extends Plugin {
   constructor (inputNodes, options) {
     super(inputNodes, {
       ...options,
@@ -274,9 +288,11 @@ export class Cacher extends Plugin {
   }
 }
 
-export default function cacher(...params) {
+module.exports = function cacher(...params) {
   return new Cacher(...params);
 }
+
+module.exports.Cacher = Cacher;
 ```
 
 Let's examine the above. First off we're importing the packages, nothing exciting there.
