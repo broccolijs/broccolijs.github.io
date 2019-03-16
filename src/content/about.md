@@ -153,7 +153,7 @@ defaults to `development`.
 This should all be fairly familiar to you if you've ever written JavaScript (or any programming language for that
 matter) before; it's just inputs and output.
 
-Note: [ES Modules](https://nodejs.org/api/esm.html) syntax is supported by Broccoli in the current master. Prior
+Note: [ES Modules](https://nodejs.org/api/esm.html) syntax is supported by Broccoli since version 2.1.0. Prior
 to this, standard CommonJs syntax with `require` and `module.exports` should be used.
 
 ### Plugins

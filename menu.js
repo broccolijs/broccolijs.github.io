@@ -13,4 +13,8 @@ module.exports = [
     title: 'Getting Started',
     url: '/getting-started.html',
   },
+  {
+    title: 'Plugins',
+    url: '/plugins.html',
+  },
 ];
