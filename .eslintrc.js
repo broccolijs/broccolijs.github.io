@@ -1,8 +1,9 @@
 module.exports = {
   root: true,
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 6,
-    sourceType: "module",
+    sourceType: 'module',
   },
   plugins: ['node', 'prettier'],
   extends: ['eslint:recommended', 'plugin:node/recommended'],
@@ -17,5 +18,6 @@ module.exports = {
     'object-shorthand': 'error',
     'prettier/prettier': ['error', require('./prettier.config')],
     'node/no-unsupported-features/es-syntax': 'off',
+    'no-unused-vars': 'off',
   }
 };
