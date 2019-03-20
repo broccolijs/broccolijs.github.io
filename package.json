@@ -25,7 +25,8 @@
     "walk-sync": "^0.3.3"
   },
   "devDependencies": {
-    "broccoli": "^2.2.0",
+    "@types/markdown-it": "^0.0.7",
+    "broccoli": "^2.3.0",
     "broccoli-cli": "^1.0.0",
     "eslint": "^5.2.0",
     "eslint-config-prettier": "^2.9.0",
@@ -36,7 +37,9 @@
     "eslint-plugin-standard": "^3.1.0",
     "minireset.css": "^0.0.3",
     "prettier": "^1.13.7",
-    "sass-lint-auto-fix": "^0.15.0"
+    "sass-lint-auto-fix": "^0.15.0",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.3.4000"
   },
   "scripts": {
     "lint": "eslint Brocfile.js",

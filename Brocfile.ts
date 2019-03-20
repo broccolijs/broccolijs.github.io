@@ -1,3 +1,4 @@
+import { BrocfileOptions } from 'broccoli';
 import md from './lib/plugin/markdown-handlebars';
 import merge from 'broccoli-merge-trees';
 import broccoliSass from 'broccoli-sass-source-maps';
@@ -11,11 +12,12 @@ import menu from './menu';
 
 const compileSass = broccoliSass(sass);
 
-export default options => {
+// noinspection JSUnusedGlobalSymbols
+export default (options: BrocfileOptions) => {
   const appRoot = 'src';
   const isProduction = options.env === 'production';
 
-  const markdown = new md(`${appRoot}/content`, `${appRoot}/templates`, {
+  const markdown = md(`${appRoot}/content`, `${appRoot}/templates`, {
     data: {
       title: 'broccoli.build',
       description: 'Broccoli.js - The asset pipeline for ambitious web applications',
