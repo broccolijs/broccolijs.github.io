@@ -21,7 +21,7 @@ these docs will use `yarn` (note: to use `npm`, replace `yarn install --dev` wit
 
 ## Installation
 
-First things first, you'll need a project directory, if you don't have one, create one now:
+You'll need a project directory, if you don't have one, create one now:
 
 ```shell
 $ mkdir broccoli-tutorial
@@ -63,9 +63,6 @@ In your `package.json` add the following to the `scripts` node (add this if it's
 You can now run `yarn build` and `yarn serve` for convenience.
 
 ## The build file
-
-Broccoli uses a file called `Brocfile.js` that must live in the root of your project, this is what will contain
-your build pipeline.
 
 Open the `Brocfile.js` and it should contain the contents:
 
