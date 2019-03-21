@@ -17,7 +17,7 @@
     <meta property="og:title" content="Broccoli Plugins | broccoli.build" />
     <meta property="og:description" content="Broccoli.js - The asset pipeline for ambitious web applications" />
     <meta property="og:type" content="article" />
-    <meta property="og:article:published_time" content="2019-03-21T17:3:01+00:00" />
+    <meta property="og:article:published_time" content="2019-03-21T17:3:84+00:00" />
     <meta property="og:url" content="https://broccoli.build/plugins.html" />
     <meta property="og:image" content="https://broccoli.build/assets/logo/logo-large-4b34a6c5a21fbbd16639b21ec2e78902.png" />
 </head>
@@ -294,15 +294,15 @@ deleted, nothing is preserved between builds.</p>
   }
 </code></pre>
 <p>Next, we’ve added a <code>_hasChanged()</code> method that does our cache state checking.</p>
-<pre><code class="hljs language-js">  getChanges() {
-    <span class="hljs-keyword">let</span> changes = [];
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>.inputPaths) {
-      <span class="hljs-keyword">const</span> current = FSTree.fromEntries(walkSync.entries(<span class="hljs-keyword">this</span>.inputPaths[i]));
-      <span class="hljs-keyword">const</span> patch = current.calculatePatch(<span class="hljs-keyword">this</span>._previous[i] || []);
-      <span class="hljs-keyword">this</span>._previous[i] = current;
+<pre><code class="hljs language-js">  _hasChanged() {
+    <span class="hljs-keyword">let</span> changed = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> inputPath <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.inputPaths) {
+      <span class="hljs-keyword">const</span> current = FSTree.fromEntries(walkSync.entries(inputPath));
+      <span class="hljs-keyword">const</span> patch = current.calculatePatch(<span class="hljs-keyword">this</span>._previous[inputPath] || []);
+      <span class="hljs-keyword">this</span>._previous[inputPath] = current;
 
       <span class="hljs-keyword">if</span> (patch.length) {
-        changes = changes.concat(patch);
+        changed = <span class="hljs-literal">true</span>;
       }
     }
 
@@ -313,12 +313,11 @@ deleted, nothing is preserved between builds.</p>
 to produce a <code>current</code> state, then calculating a patch which tells us about added/removed/changed files using
 <code>calculatePatch()</code>, and setting <code>changed</code> if there are any changes, then returning the <code>changed</code> result.</p>
 <pre><code class="hljs language-js">  build() {
-    <span class="hljs-keyword">const</span> changes = <span class="hljs-keyword">this</span>.getChanges();
-    <span class="hljs-keyword">if</span> (!changes.length) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>._hasChanged()) {
       <span class="hljs-keyword">return</span>;
     }
 
-    <span class="hljs-comment">// do work, iterate changes for added/changed/deleted files</span>
+    <span class="hljs-comment">// do work</span>
   }
 </code></pre>
 <p>Then in the <code>build()</code> method we simply call <code>this._hasChanged()</code> and if nothing has changed, we skip doing any
