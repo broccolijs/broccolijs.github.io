@@ -54,7 +54,7 @@ In your `package.json` add the following to the `scripts` node (add this if it's
 ```json
 {
   "scripts": {
-    "build": "broccoli build --overwrite",
+    "build": "broccoli build",
     "serve": "broccoli serve"
   }
 }
