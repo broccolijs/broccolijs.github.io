@@ -48,7 +48,7 @@ import readDir from './readDir';
 import readFiles from './readFiles';
 
 function concatFiles(sourceDir, outputFile) {
-    const output = readDir(sourceFiles).reduce((output, file) => output += `;${file.content}`, '');
+    const output = readDir(sourceDir).reduce((output, file) => output += `;${file.content}`, '');
     fs.writeFileSync(outputFile, output)
 }
 
