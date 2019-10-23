@@ -17,7 +17,7 @@
     <meta property="og:title" content="What is Broccoli.js? | broccoli.build" />
     <meta property="og:description" content="Broccoli.js - The asset pipeline for ambitious web applications" />
     <meta property="og:type" content="article" />
-    <meta property="og:article:published_time" content="2019-04-17T5:4:22+00:00" />
+    <meta property="og:article:published_time" content="2019-10-23T14:10:21+00:00" />
     <meta property="og:url" content="https://broccoli.build/about.html" />
     <meta property="og:image" content="https://broccoli.build/assets/logo/logo-large-4b34a6c5a21fbbd16639b21ec2e78902.png" />
 </head>
@@ -47,7 +47,7 @@
         <div><p>Broccoli is a JavaScript build tool. A build tool is a piece of software that is responsible for assembling your
 applications assets (JavaScript, CSS, images, etc) into some distributable form, usually to run in a browser.
 All configuration is done in JavaScript (no confusing/messy config files) via a modular plugin architecture.</p>
-<nav class="table-of-contents"><ol><li><a href="#what-is-a-build-tool%3F">What is a build tool? </a></li><li><a href="#thinking-in-broccoli">Thinking in Broccoli </a><ol><li><a href="#directories">Directories </a></li><li><a href="#plugins">Plugins </a></li><li><a href="#trees">Trees </a></li></ol></li><li><a href="#building">Building </a></li><li><a href="#serving">Serving </a></li></ol></nav><h2 id="what-is-a-build-tool%3F">What is a build tool? <a class="header-anchor" href="#what-is-a-build-tool%3F" aria-hidden="true">⚭</a></h2>
+<nav class="table-of-contents"><ol><li><a href="#what-is-a-build-tool%3F">What is a build tool? </a></li><li><a href="#thinking-in-broccoli">Thinking in Broccoli </a><ol><li><a href="#directories">Directories </a></li><li><a href="#plugins">Plugins </a></li><li><a href="#trees">Trees </a></li></ol></li><li><a href="#building">Building </a></li><li><a href="#serving">Serving </a></li></ol></nav><h2 id="what-is-a-build-tool%3F">What is a build tool? <a class="header-anchor" href="#what-is-a-build-tool%3F">⚭</a></h2>
 <p>A build tool’s job is to take input files (your JavaScript, CSS, HTML, etc), to process them and output the result
 of those transformations, usually into some distributable form. Typically this will involve things like JavaScript
 transformations to allow you to write newer syntax that will work in a browser, to use a CSS pre-processor like
@@ -59,14 +59,14 @@ bundler), these all aim to solve different problems than what Broccoli was built
 <a href="https://rollupjs.org/">Rollup</a>, <a href="https://github.com/sass/node-sass">Node-Sass</a>,
 <a href="https://webpack.js.org/">Webpack</a>, <a href="http://browserify.org/">Browserify</a>, and many more can easily be used with
 Broccoli. These tools perform the actual work by transforming files, Broccoli merely connects inputs to outputs.</p>
-<h2 id="thinking-in-broccoli">Thinking in Broccoli <a class="header-anchor" href="#thinking-in-broccoli" aria-hidden="true">⚭</a></h2>
+<h2 id="thinking-in-broccoli">Thinking in Broccoli <a class="header-anchor" href="#thinking-in-broccoli">⚭</a></h2>
 <p>There are 3 main concepts to get your head around when using Broccoli:</p>
 <ul>
 <li><a href="#directories">Directories</a></li>
 <li><a href="#plugins">Plugins</a></li>
 <li><a href="#trees">Trees</a></li>
 </ul>
-<h3 id="directories">Directories <a class="header-anchor" href="#directories" aria-hidden="true">⚭</a></h3>
+<h3 id="directories">Directories <a class="header-anchor" href="#directories">⚭</a></h3>
 <p>Using the above tools in a standalone fashion is relatively straight forward, they read input files, and write
 to output files. The difficulty comes when connecting different tools together as you need to manage all the
 interim state yourself. The only common interface between them is the file system.</p>
@@ -167,7 +167,7 @@ defaults to <code>development</code>.</p>
 matter) before; it’s just inputs and output.</p>
 <p>Note: <a href="https://nodejs.org/api/esm.html">ES Modules</a> syntax is supported by Broccoli since version 2.1.0. Prior
 to this, standard CommonJs syntax with <code>require</code> and <code>module.exports</code> should be used.</p>
-<h3 id="plugins">Plugins <a class="header-anchor" href="#plugins" aria-hidden="true">⚭</a></h3>
+<h3 id="plugins">Plugins <a class="header-anchor" href="#plugins">⚭</a></h3>
 <p>Plugins are what a build pipeline developer will interact with most. Plugins are what do the actual work of
 transforming files at each step of the build process. The API of a plugin is pretty simple, all that’s required is
 creating a class that extends the <a href="https://github.com/broccolijs/broccoli-plugin">broccoli-plugin</a> base class, and
@@ -198,7 +198,7 @@ to its output directory, and also allows Broccoli to <code>watch</code> and be n
 directory change and trigger a rebuild. You can also manually create an <code>unwatched</code> directory from a string by
 using <a href="https://github.com/broccolijs/broccoli-source#new-unwatcheddirdirectorypath-options">UnwatchedDir</a>,
 changes in this directory will not trigger a rebuild.</p>
-<h3 id="trees">Trees <a class="header-anchor" href="#trees" aria-hidden="true">⚭</a></h3>
+<h3 id="trees">Trees <a class="header-anchor" href="#trees">⚭</a></h3>
 <p>The build pipeline is a series of connected plugins, from one or more input directories to a single target directory.
 Working from the target directory (the final output) back up to the source directories resembles a tree. Think of a
 piece of Broccoli and you should have a mental model of what a build pipeline looks like.</p>
@@ -212,7 +212,7 @@ to. Broccoli normalizes each plugin into what it calls <code>nodes</code>, that 
 output of each item in the build pipeline.</p>
 <p>You may often encounter the term “tree” when reading plugin READMEs or in tutorials, just remember a tree is a
 connected set of plugins.</p>
-<h2 id="building">Building <a class="header-anchor" href="#building" aria-hidden="true">⚭</a></h2>
+<h2 id="building">Building <a class="header-anchor" href="#building">⚭</a></h2>
 <p>When Broccoli starts up, the build file <code>Brocfile.js</code> file in the root of the project is parsed, from last
 (target) plugin/node up to the source directories. As it does so, Broccoli handles wiring up all of the nodes’
 inputs and outputs into a graph (from the end node up to the start nodes), creating temporary output directories
@@ -242,7 +242,7 @@ export default () =&gt; broccoli-merge-trees <span class="hljs-keyword">node</sp
 <p>The two input nodes reference two source directories, <code>dir1</code> and <code>dir2</code>.
 Thus <code>export default</code> contains a node that references the two input nodes, and an output path that will contain the
 contents of <code>dir1</code> and <code>dir2</code> when the <code>build</code> command is run.</p>
-<h2 id="serving">Serving <a class="header-anchor" href="#serving" aria-hidden="true">⚭</a></h2>
+<h2 id="serving">Serving <a class="header-anchor" href="#serving">⚭</a></h2>
 <p>One last thing. Broccoli comes with a built in development server that provides an HTTP server to host your assets
 in development, and perform rebuilds when source directories (nodes) change.</p>
 <p>The local HTTP server runs on <code>http://localhost:4200</code></p>
