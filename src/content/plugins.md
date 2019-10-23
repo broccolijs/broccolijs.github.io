@@ -83,7 +83,7 @@ build output. Broccoli sets the path to this directory to `this.cachePath`.
 
 Build can do anything you can do in node. Additionally, if `build()` returns a promise, Broccoli will wait until the
 promise resolves before continuing the rest of the build. Broccoli only builds one plugin at a time in order, from top
-to bottom of the build graph. The build method is where the grunt (lol, intentional pun) of the work happens.
+to bottom of the build graph. The build method is where the brunt of the work happens.
 
 This function will typically access the following properties:
 
