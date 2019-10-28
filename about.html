@@ -17,7 +17,7 @@
     <meta property="og:title" content="What is Broccoli.js? | broccoli.build" />
     <meta property="og:description" content="Broccoli.js - The asset pipeline for ambitious web applications" />
     <meta property="og:type" content="article" />
-    <meta property="og:article:published_time" content="2019-10-23T14:10:21+00:00" />
+    <meta property="og:article:published_time" content="2019-10-28T22:10:79+00:00" />
     <meta property="og:url" content="https://broccoli.build/about.html" />
     <meta property="og:image" content="https://broccoli.build/assets/logo/logo-large-4b34a6c5a21fbbd16639b21ec2e78902.png" />
 </head>
@@ -78,7 +78,7 @@ interim state yourself. The only common interface between them is the file syste
 <span class="hljs-keyword">import</span> readFiles <span class="hljs-keyword">from</span> <span class="hljs-string">'./readFiles'</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFiles</span>(<span class="hljs-params">sourceDir, outputFile</span>) </span>{
-    <span class="hljs-keyword">const</span> output = readDir(sourceFiles).reduce(<span class="hljs-function">(<span class="hljs-params">output, file</span>) =&gt;</span> output += <span class="hljs-string">`;<span class="hljs-subst">${file.content}</span>`</span>, <span class="hljs-string">''</span>);
+    <span class="hljs-keyword">const</span> output = readDir(sourceDir).reduce(<span class="hljs-function">(<span class="hljs-params">output, file</span>) =&gt;</span> output += <span class="hljs-string">`;<span class="hljs-subst">${file.content}</span>`</span>, <span class="hljs-string">''</span>);
     fs.writeFileSync(outputFile, output)
 }
 
