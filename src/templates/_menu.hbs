@@ -1,15 +1,7 @@
 <nav>
     <ul>
-        <li class="logo">
-            <a href="/">
-                <img src="/assets/logo/logo-white-tiny.png"
-                     srcset="/assets/logo/logo-white-tiny.png 1x, /assets/logo/logo-white-tiny@2x.png 2x"
-                     width="25px"
-                />
-            </a>
-        </li>
         {{#each site.menu}}
-            <li><a href="{{this.url}}" title="{{this.title}}">{{this.title}}</a></li>
+        <li><a href="{{this.url}}" title="{{this.title}}">{{this.title}}</a></li>
         {{/each}}
     </ul>
 </nav>
