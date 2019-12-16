@@ -5,11 +5,11 @@
   "dependencies": {
     "broccoli-asset-rev": "^3.0.0",
     "broccoli-clean-css": "^2.0.1",
-    "broccoli-funnel": "^2.0.1",
+    "broccoli-funnel": "^3.0.1",
     "broccoli-livereload": "^1.3.0",
     "broccoli-markdown-resolver": "^0.0.1",
-    "broccoli-merge-trees": "^3.0.1",
-    "broccoli-plugin": "^1.3.1",
+    "broccoli-merge-trees": "^4.0.0",
+    "broccoli-plugin": "^4.0.1",
     "broccoli-sass-lint": "^1.1.2",
     "broccoli-sass-source-maps": "^4.0.0",
     "front-matter": "^2.3.0",
@@ -22,13 +22,13 @@
     "mkdirp": "^0.5.1",
     "promise-map-series": "^0.2.3",
     "sass": "^1.13.2",
-    "walk-sync": "^0.3.3"
+    "walk-sync": "^2.0.2"
   },
   "devDependencies": {
-    "@types/markdown-it": "^0.0.7",
-    "@types/node": "^11.11.4",
-    "@typescript-eslint/parser": "^1.5.0",
-    "broccoli": "^2.3.0",
+    "@types/markdown-it": "^0.0.9",
+    "@types/node": "^12.12.18",
+    "@typescript-eslint/parser": "^2.11.0",
+    "broccoli": "^3.2.0",
     "broccoli-cli": "^1.0.0",
     "eslint": "^5.2.0",
     "eslint-config-prettier": "^2.9.0",
@@ -59,6 +59,6 @@
   "author": "Oli Griffiths <oligriffiths@users.noreply.github.com>",
   "license": "MIT",
   "engines": {
-    "node": ">= 8.10"
+    "node": "10.* || >= 12"
   }
 }
