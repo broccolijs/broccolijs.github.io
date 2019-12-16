@@ -13,7 +13,7 @@
     "broccoli-sass-lint": "^1.1.2",
     "broccoli-sass-source-maps": "^4.0.0",
     "front-matter": "^2.3.0",
-    "handlebars": "^4.0.11",
+    "handlebars": "^4.1.2",
     "handlebars-helpers": "^0.10.0",
     "markdown-it": "^8.4.2",
     "markdown-it-anchor": "^5.0.2",
