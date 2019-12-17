@@ -82,14 +82,13 @@ string into a `source node`, and on build, validate that the directory exists. I
 exports a single node, containing the contents of the `src` directory, this will then be copied to the destination
 directory (`dist` in our case).
 
-To run a build, run `yarn build` (if you added the script) or `broccoli build --overwrite` (note: without `--overwrite`
-the contents of the output directory `dist` will NOT be overwritten and produce an error).
+To run a build, run `yarn build` (if you added the script) or `broccoli build`.
 
 You should see something like:
 
 ```sh
 $ yarn build
-$ broccoli build --overwrite
+$ broccoli build
 
 
 
