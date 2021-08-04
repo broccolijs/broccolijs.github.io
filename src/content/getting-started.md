@@ -131,7 +131,7 @@ Browser.
 
 Congratulations 👏, you've just written your first Broccoli pipeline!
 
-For a demo, checkout this sanbox from [codesandbox.io](https://codesandbox.io)
+For a demo, checkout this sandbox from [codesandbox.io](https://codesandbox.io)
 
 <div class="mobile-show">
 <a href="https://codesandbox.io/s/github/broccolijs/broccoli-tutorial/tree/master/">
